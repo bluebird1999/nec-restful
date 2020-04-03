@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globe_sh.cloudplatform.restful.dao.DataDAO">        
+    <select id="getData" parameterType="String" resultType="com.globe_sh.cloudplatform.restful.entity.DataEntity">
+        select b.sample_time,b.station,b.device,b.data_block,d.code,d.value 
+        from i_decoded_data_batch b, i_decoded_data d
+        <where>
+        	d.data_batch_id=b.data_batch_id  
+        	<if test="station != null and station != ''">
+				and	b.station = #{station}
+			</if>
+        	<if test="device != null and device != ''">
+				and	b.device = #{device}
+			</if>
+        	<if test="datablock != null and datablock != ''">
+				and	b.data_block = #{datablock}
+			</if>
+        	<if test="data != null and data != ''">
+				and	d.code = #{data}
+			</if>			
+        	<if test="start != null and start != ''">
+				and	b.sample_time>= #{start}
+			</if>		
+        	<if test="end != null and end != ''">
+				and	b.sample_time&lt;= #{end}
+			</if>													
+        </where>   
+    </select>
+</mapper>
