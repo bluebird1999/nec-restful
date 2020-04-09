@@ -2,6 +2,8 @@ package com.globe_sh.cloudplatform.restful.entity;
 
 import java.io.Serializable;
 
+import com.alibaba.fastjson.JSONObject;
+
 public class DeviceEntity implements Serializable {
 
 	private static final long serialVersionUID = 3558195671797896609L;
@@ -62,4 +64,14 @@ public class DeviceEntity implements Serializable {
 	public void setDeviceDescription(String deviceDescription) {
 		this.device_description = deviceDescription;
 	}
+	public String getJsonString() {
+		JSONObject json = new JSONObject();
+		json.put("id", this.id);
+		json.put("device_code", this.device_code);
+		json.put("create_time", this.create_time);
+		json.put("station_code", this.station_code);
+		json.put("device_name", this.device_name);
+		json.put("device_description", this.device_description);
+		return json.toJSONString();
+	}	
 }

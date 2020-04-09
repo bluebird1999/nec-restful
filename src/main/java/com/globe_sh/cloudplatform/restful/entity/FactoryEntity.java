@@ -2,6 +2,8 @@ package com.globe_sh.cloudplatform.restful.entity;
 
 import java.io.Serializable;
 
+import com.alibaba.fastjson.JSONObject;
+
 public class FactoryEntity implements Serializable {
 
 	private static final long serialVersionUID = 3558195671797896609L;
@@ -53,4 +55,13 @@ public class FactoryEntity implements Serializable {
 	public void setFactoryDescription(String factoryDescription) {
 		this.factory_description = factoryDescription;
 	}
+	public String getJsonString() {
+		JSONObject json = new JSONObject();
+		json.put("id", this.id);
+		json.put("factory_code", this.factory_code);
+		json.put("create_time", this.create_time);
+		json.put("factory_name", this.factory_name);
+		json.put("factory_description", this.factory_description);
+		return json.toJSONString();
+	}	
 }

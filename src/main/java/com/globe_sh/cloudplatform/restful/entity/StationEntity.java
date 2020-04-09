@@ -2,6 +2,10 @@ package com.globe_sh.cloudplatform.restful.entity;
 
 import java.io.Serializable;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.globe_sh.cloudplatform.common.util.StaticMethod;
+
 public class StationEntity implements Serializable {
 
 	private static final long serialVersionUID = 3558195671797896609L;
@@ -12,18 +16,20 @@ public class StationEntity implements Serializable {
 	private String factory_code;
 	private String station_name;
 	private String station_description;
-
+	private int station_status;
+	
 	public StationEntity() {
 	}
 	
 	public StationEntity(int id, String stationCode, String createTime, String factoryCode,
-			String stationName, String stationDescription) {
+			String stationName, String stationDescription, int stationStatus) {
 		this.id = id;
 		this.station_code = stationCode;
 		this.create_time = createTime;
 		this.factory_code = factoryCode;
 		this.station_name = stationName;
 		this.station_description = stationDescription;
+		this.station_status = stationStatus;
 	}
 	
 	public int getId() {
@@ -62,4 +68,21 @@ public class StationEntity implements Serializable {
 	public void setStationDescription(String stationDescription) {
 		this.station_description = stationDescription;
 	}
+	public int getStationStatus() {
+		return station_status;
+	}
+	public void setStationStatus(int station_status) {
+		this.station_status = station_status;
+	}
+	public String getJsonString() {
+		JSONObject json = new JSONObject();
+		json.put("id", this.id);
+		json.put("station_code", this.station_code);
+		json.put("create_time", this.create_time);
+		json.put("factory_code", this.factory_code);
+		json.put("station_name", this.station_name);
+		json.put("station_description", this.station_description);
+		json.put("station_status", this.station_status);
+		return json.toJSONString();
+	}	
 }

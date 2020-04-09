@@ -2,6 +2,8 @@ package com.globe_sh.cloudplatform.restful.entity;
 
 import java.io.Serializable;
 
+import com.alibaba.fastjson.JSONObject;
+
 public class DecoderEntity implements Serializable {
 
 	private static final long serialVersionUID = 3558195671797896609L;
@@ -135,5 +137,24 @@ public class DecoderEntity implements Serializable {
 	}
 	public void setDataDictionary(String dataDictionary) {
 		this.data_dictionary = dataDictionary;
+	}	
+	public String getJsonString() {
+		JSONObject json = new JSONObject();
+		json.put("id", this.id);
+		json.put("data_code", this.data_code);
+		json.put("create_time", this.create_time);
+		json.put("data_block_code", this.data_block_code);
+		json.put("data_name", this.data_name);
+		json.put("data_description", this.data_description);
+		json.put("data_type", this.data_type);
+		json.put("data_kind", this.data_kind);
+		json.put("start_byte", this.start_byte);
+		json.put("start_bit", this.start_bit);
+		json.put("data_length", this.data_length);
+		json.put("data_precision", this.data_precision);
+		json.put("data_deviation", this.data_deviation);
+		json.put("data_unit", this.data_unit);
+		json.put("data_dictionary", this.data_dictionary);		
+		return json.toJSONString();
 	}	
 }

@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.Param;
 import com.globe_sh.cloudplatform.restful.entity.StationEntity;
@@ -17,16 +18,17 @@ public interface StationDAO {
 
     @Select("SELECT * FROM c_station WHERE station_code = #{code}")
     public StationEntity getStationByCode(@Param("code") String code);
-/*
-    @Delete("DELETE FROM raw WHERE id = #{id}")
-    public int deleteById(String id);
-
-    @Insert("INSERT INTO raw(id, first_name, last_name,email_address) " +
-        " VALUES (#{id}, #{firstName}, #{lastName}, #{emailId})")
-    public int insert(FactoryEntity raw);
-
-    @Update("Update raw set first_name=#{firstName}, " +
-        " last_name=#{lastName}, email_address=#{emailId} where id=#{id}")
-    public int update(FactoryEntity employee);
-*/    
+    
+    @Insert("INSERT INTO c_station (station_code, create_time, factory_code, station_name, station_description, station_status) " +
+            " VALUES (#{station_code}, #{create_time}, #{factory_code}, #{station_name}, #{station_description}, #{station_status})")
+    @SelectKey(statement="select LAST_INSERT_ID()", keyProperty="id", keyColumn="id", before=false, resultType=int.class)
+    public int insertStation(StationEntity se);  
+    
+    @Delete("DELETE FROM c_station WHERE station_code = #{code}")
+    public int deleteStation(@Param("code") String code); 
+    
+    @Update("UPDATE c_station SET station_code=#{st.station_code}, factory_code=#{st.factory_code}, " +
+    		"station_name=#{st.station_name}, station_description=#{st.station_description} " +
+    		"WHERE station_code = #{code}")
+    public int updateStation(@Param("code") String code, @Param("st") StationEntity st);         
 }

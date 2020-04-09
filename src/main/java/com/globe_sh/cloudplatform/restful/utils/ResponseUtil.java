@@ -28,6 +28,14 @@ public class ResponseUtil {
         return obj;
     }
 
+    public static JSONObject failureMore(int status, String msg, Object data) {
+    	JSONObject obj = new JSONObject();
+        obj.put("status", status);
+        obj.put("message", msg);
+        obj.put("data", data);
+        return obj;
+    }
+    
     public static JSONObject failure(int status, String msg) {
     	JSONObject obj = new JSONObject();
         obj.put("status", status);

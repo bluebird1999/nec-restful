@@ -2,6 +2,8 @@ package com.globe_sh.cloudplatform.restful.entity;
 
 import java.io.Serializable;
 
+import com.alibaba.fastjson.JSONObject;
+
 public class DataBlockEntity implements Serializable {
 
 	private static final long serialVersionUID = 3558195671797896609L;
@@ -62,4 +64,14 @@ public class DataBlockEntity implements Serializable {
 	public void setDataBlockDescription(String dataBlockDescription) {
 		this.data_block_description = dataBlockDescription;
 	}
+	public String getJsonString() {
+		JSONObject json = new JSONObject();
+		json.put("id", this.id);
+		json.put("data_block_code", this.data_block_code);
+		json.put("create_time", this.create_time);
+		json.put("device_code", this.device_code);
+		json.put("data_block_name", this.data_block_name);
+		json.put("data_block_description", this.data_block_description);
+		return json.toJSONString();
+	}		
 }

@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.Param;
 import com.globe_sh.cloudplatform.restful.entity.FactoryEntity;
@@ -17,16 +18,17 @@ public interface FactoryDAO {
 
     @Select("SELECT * FROM c_factory WHERE factory_code = #{code}")
     public FactoryEntity getFactoryByCode(@Param("code") String code);
-/*
-    @Delete("DELETE FROM raw WHERE id = #{id}")
-    public int deleteById(String id);
-
-    @Insert("INSERT INTO raw(id, first_name, last_name,email_address) " +
-        " VALUES (#{id}, #{firstName}, #{lastName}, #{emailId})")
-    public int insert(FactoryEntity raw);
-
-    @Update("Update raw set first_name=#{firstName}, " +
-        " last_name=#{lastName}, email_address=#{emailId} where id=#{id}")
-    public int update(FactoryEntity employee);
-*/    
+    
+    @Insert("INSERT INTO c_factory (factory_code, create_time, factory_name, factory_description) " +
+            " VALUES (#{factory_code}, #{create_time}, #{factory_name}, #{factory_description})")
+    @SelectKey(statement="select LAST_INSERT_ID()", keyProperty="id", keyColumn="id", before=false, resultType=int.class)
+    public int insertFactory(FactoryEntity se);  
+    
+    @Delete("DELETE FROM c_factory WHERE factory_code = #{code}")
+    public int deleteFactory(@Param("code") String code); 
+    
+    @Update("UPDATE c_factory SET factory_code=#{st.factory_code}, " +
+    		"factory_name=#{st.factory_name}, factory_description=#{st.factory_description} " +
+    		"WHERE factory_code = #{code}")
+    public int updateFactory(@Param("code") String code, @Param("st") FactoryEntity st);   
 }
