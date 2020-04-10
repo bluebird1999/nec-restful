@@ -55,7 +55,7 @@ public class RolesController {
 	private static Logger logger = org.apache.logging.log4j.LogManager.getLogger(RolesController.class);
 	  
 //************************Factory************************	
-	@RequestMapping(value = "/factories", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/factories", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public JSONObject getFactoryAll() {
 		try {
 			JSONArray res = new JSONArray();
@@ -77,7 +77,7 @@ public class RolesController {
 			return ResponseUtil.failureMore(502,e.getMessage(),res);
 		}
     }
-	@RequestMapping(value = "/factories/{code}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/factories/{code}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public JSONObject getFactoryByCode(@PathVariable("code") String code) {
 		try {
 			JSONObject res = new JSONObject();
@@ -93,7 +93,7 @@ public class RolesController {
 			return ResponseUtil.failureMore(502,e.getMessage(),res);
 		}
     }
-	@RequestMapping(value = "/factories", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/factories", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public JSONObject createFactory(@RequestParam("code") String code,
     		@RequestParam("name") String name,
     		@RequestParam("description") String description
@@ -114,7 +114,7 @@ public class RolesController {
 			return ResponseUtil.failureMore(502,e.getMessage(),res);
 		}
     }
-	@RequestMapping(value = "/factories/{code}", method = RequestMethod.DELETE, produces = "application/json")
+	@RequestMapping(value = "/factories/{code}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
     public JSONObject createFactory(@PathVariable("code") String code ) {
 		try {
 			JSONObject res = new JSONObject();
@@ -127,7 +127,7 @@ public class RolesController {
 			return ResponseUtil.failureMore(502,e.getMessage(),res);
 		}
     }
-	@RequestMapping(value = "/factories/{code}", method = RequestMethod.PUT, produces = "application/json")
+	@RequestMapping(value = "/factories/{code}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
     public JSONObject updateFactory(
     		@PathVariable("code") String code,
     		@RequestParam("code") String code_new,
@@ -155,7 +155,7 @@ public class RolesController {
     }			
 
 //************************Station************************	
-		@RequestMapping(value = "/stations", method = RequestMethod.GET, produces = "application/json")
+		@RequestMapping(value = "/stations", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	    public JSONObject getStationAll() {
 			try {
 				JSONArray res = new JSONArray();
@@ -180,7 +180,7 @@ public class RolesController {
 			}
 
 	    }
-		@RequestMapping(value = "/stations/{code}", method = RequestMethod.GET, produces = "application/json")
+		@RequestMapping(value = "/stations/{code}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	    public JSONObject getStationByCode(@PathVariable("code") String code) {
 			try {
 				JSONObject res = new JSONObject();
@@ -198,7 +198,7 @@ public class RolesController {
 				return ResponseUtil.failureMore(502,e.getMessage(),res);
 			}
 	    }
-		@RequestMapping(value = "/stations", method = RequestMethod.POST, produces = "application/json")
+		@RequestMapping(value = "/stations", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	    public JSONObject createStation(@RequestParam("code") String code,
 	    		@RequestParam("factory") String factory,
 	    		@RequestParam("name") String name,
@@ -222,7 +222,7 @@ public class RolesController {
 				return ResponseUtil.failureMore(502,e.getMessage(),res);
 			}
 	    }
-		@RequestMapping(value = "/stations/{code}", method = RequestMethod.DELETE, produces = "application/json")
+		@RequestMapping(value = "/stations/{code}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
 	    public JSONObject createStation(@PathVariable("code") String code ) {
 			try {
 				JSONObject res = new JSONObject();
@@ -237,7 +237,7 @@ public class RolesController {
 				return ResponseUtil.failureMore(502,e.getMessage(),res);
 			}
 	    }
-		@RequestMapping(value = "/stations/{code}", method = RequestMethod.PUT, produces = "application/json")
+		@RequestMapping(value = "/stations/{code}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	    public JSONObject updateStation(
 	    		@PathVariable("code") String code,
 	    		@RequestParam("code") String code_new,
@@ -269,7 +269,7 @@ public class RolesController {
 			}
 	    }			
 //************************Device************************	
-		@RequestMapping(value = "/devices", method = RequestMethod.GET, produces = "application/json")
+		@RequestMapping(value = "/devices", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	    public JSONObject getDeviceAll() {
 			try {
 				JSONArray res = new JSONArray();
@@ -293,7 +293,7 @@ public class RolesController {
 			}
 
 	    }
-		@RequestMapping(value = "/devices/{code}", method = RequestMethod.GET, produces = "application/json")
+		@RequestMapping(value = "/devices/{code}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	    public JSONObject getDeviceByCode(@PathVariable("code") String code) {
 			try {
 				JSONObject res = new JSONObject();
@@ -310,7 +310,7 @@ public class RolesController {
 				return ResponseUtil.failureMore(502,e.getMessage(),res);
 			}
 	    }
-		@RequestMapping(value = "/devices", method = RequestMethod.POST, produces = "application/json")
+		@RequestMapping(value = "/devices", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	    public JSONObject createDevice(@RequestParam("code") String code,
 	    		@RequestParam("station") String station,
 	    		@RequestParam("name") String name,
@@ -332,7 +332,7 @@ public class RolesController {
 				return ResponseUtil.failureMore(502,e.getMessage(),res);
 			}
 	    }
-		@RequestMapping(value = "/devices/{code}", method = RequestMethod.DELETE, produces = "application/json")
+		@RequestMapping(value = "/devices/{code}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
 	    public JSONObject createDevice(@PathVariable("code") String code ) {
 			try {
 				JSONObject res = new JSONObject();
@@ -345,7 +345,7 @@ public class RolesController {
 				return ResponseUtil.failureMore(502,e.getMessage(),res);
 			}
 	    }
-		@RequestMapping(value = "/devices/{code}", method = RequestMethod.PUT, produces = "application/json")
+		@RequestMapping(value = "/devices/{code}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	    public JSONObject updateDevice(
 	    		@PathVariable("code") String code,
 	    		@RequestParam("code") String code_new,
@@ -376,7 +376,7 @@ public class RolesController {
 	    }	
 		
 //************************DataBlock************************	
-		@RequestMapping(value = "/datablocks", method = RequestMethod.GET, produces = "application/json")
+		@RequestMapping(value = "/datablocks", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	    public JSONObject getDataBlockAll() {
 			try {
 				JSONArray res = new JSONArray();
@@ -400,7 +400,7 @@ public class RolesController {
 			}
 
 	    }
-		@RequestMapping(value = "/datablocks/{code}", method = RequestMethod.GET, produces = "application/json")
+		@RequestMapping(value = "/datablocks/{code}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	    public JSONObject getDataBlockByCode(@PathVariable("code") String code) {
 			try {
 				JSONObject res = new JSONObject();
@@ -417,7 +417,7 @@ public class RolesController {
 				return ResponseUtil.failureMore(502,e.getMessage(),res);
 			}
 	    }
-		@RequestMapping(value = "/datablocks", method = RequestMethod.POST, produces = "application/json")
+		@RequestMapping(value = "/datablocks", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	    public JSONObject createDataBlock(@RequestParam("code") String code,
 	    		@RequestParam("device") String device,
 	    		@RequestParam("name") String name,
@@ -439,7 +439,7 @@ public class RolesController {
 				return ResponseUtil.failureMore(502,e.getMessage(),res);
 			}
 	    }
-		@RequestMapping(value = "/datablocks/{code}", method = RequestMethod.DELETE, produces = "application/json")
+		@RequestMapping(value = "/datablocks/{code}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
 	    public JSONObject createDataBlock(@PathVariable("code") String code ) {
 			try {
 				JSONObject res = new JSONObject();
@@ -452,7 +452,7 @@ public class RolesController {
 				return ResponseUtil.failureMore(502,e.getMessage(),res);
 			}
 	    }
-		@RequestMapping(value = "/datablocks/{code}", method = RequestMethod.PUT, produces = "application/json")
+		@RequestMapping(value = "/datablocks/{code}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	    public JSONObject updateDataBlock(
 	    		@PathVariable("code") String code,
 	    		@RequestParam("code") String code_new,

@@ -38,7 +38,7 @@ public class DecoderController {
 	
 	private static Logger logger = org.apache.logging.log4j.LogManager.getLogger(RolesController.class);
 	  
-	@RequestMapping(value = "/decoders", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/decoders", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public JSONObject getDecoderAll() {
 		try {
 			JSONArray res = new JSONArray();
@@ -73,7 +73,7 @@ public class DecoderController {
 
     }
 	
-	@RequestMapping(value = "/decoders/{code}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/decoders/{code}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public JSONObject getDecoderByCode(@PathVariable("code") String code) {
 		try {
 			JSONObject res = new JSONObject();
@@ -100,7 +100,7 @@ public class DecoderController {
 		}
     }
 	
-	@RequestMapping(value = "/decoders", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/decoders", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public JSONObject createDecoder(
     		@RequestParam("code") String code,
     		@RequestParam("data_block") String data_block,
@@ -136,7 +136,7 @@ public class DecoderController {
 			return ResponseUtil.failureMore(502,e.getMessage(),res);
 		}
     }
-	@RequestMapping(value = "/decoders/{code}", method = RequestMethod.DELETE, produces = "application/json")
+	@RequestMapping(value = "/decoders/{code}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
     public JSONObject createDecoder(@PathVariable("code") String code ) {
 		try {
 			JSONObject res = new JSONObject();
@@ -152,7 +152,7 @@ public class DecoderController {
 			return ResponseUtil.failureMore(502,e.getMessage(),res);
 		}
     }
-	@RequestMapping(value = "/decoders/{code}", method = RequestMethod.PUT, produces = "application/json")
+	@RequestMapping(value = "/decoders/{code}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
     public JSONObject updateDecoder(
     		@PathVariable("code") String code,
     		@RequestParam("code") String code_new,

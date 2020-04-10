@@ -38,7 +38,7 @@ public class DataController {
 	private static Logger logger = org.apache.logging.log4j.LogManager.getLogger(RolesController.class);
 	  
 	@RequestMapping(value = "/data", params = { "station","device","datablock","data","start","end" }, 
-			method = RequestMethod.GET, produces = "application/json")
+			method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public JSONObject getData(
     								@RequestParam("station") String station,
     								@RequestParam("device") String device,
