@@ -5,17 +5,17 @@
         select b.sample_time,b.station,b.device,b.data_block,d.code,d.value 
         from i_decoded_data_batch b, i_decoded_data d
         <where>
-        	d.data_batch_id=b.data_batch_id  
+        	d.batch=b.batch  
         	<if test="station != null and station != ''">
 				and	b.station = #{station}
 			</if>
         	<if test="device != null and device != ''">
 				and	b.device = #{device}
 			</if>
-        	<if test="datablock != null and datablock != ''">
+        	<if test="datablock != null and datablock !='' ">
 				and	b.data_block = #{datablock}
 			</if>
-        	<if test="data != null and data != ''">
+        	<if test="data !=null and data !='' ">
 				and	d.code = #{data}
 			</if>			
         	<if test="start != null and start != ''">

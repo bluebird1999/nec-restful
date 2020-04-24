@@ -9,15 +9,15 @@ public class DataEntity implements Serializable {
 	private String sample_time;
 	private String station;
 	private String device;
-	private String data_block;
-	private String code;
+	private int data_block;
+	private int code;
 	private String value;
 
 	public DataEntity() {
 	}
 	
 	public DataEntity(String sampleTime, String station, String device, 
-			String dataBlock, String code, String value) {
+			int dataBlock, int code, String value) {
 		this.sample_time = sampleTime;
 		this.station = station;
 		this.device = device;
@@ -44,16 +44,16 @@ public class DataEntity implements Serializable {
 	public void setDevice(String device) {
 		this.device = device;
 	}
-	public String getDataBlock() {
+	public int getDataBlock() {
 		return data_block;
 	}
-	public void setDataBlock(String dataBlock) {
+	public void setDataBlock(int dataBlock) {
 		this.data_block = dataBlock;
 	}
-	public String getCode() {
+	public int getCode() {
 		return code;
 	}
-	public void setCode(String code) {
+	public void setCode(int code) {
 		this.code = code;
 	}
 	public String getValue() {

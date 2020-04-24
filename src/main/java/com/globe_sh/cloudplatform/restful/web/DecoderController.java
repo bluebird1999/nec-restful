@@ -4,6 +4,7 @@ import com.globe_sh.cloudplatform.restful.RestfulMain;
 import com.globe_sh.cloudplatform.restful.dao.DecoderDAO;
 import com.globe_sh.cloudplatform.restful.entity.DecoderEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import java.sql.Timestamp;
@@ -50,7 +51,7 @@ public class DecoderController {
 				jo.put("id",obj.getId());
 				jo.put("code",obj.getDataCode());
 				jo.put("create",obj.getCreateTime());
-				jo.put("data_block",obj.getDataBlockCode());
+				jo.put("data_block",obj.getDataBlock());
 				jo.put("name",obj.getDataName());		
 				jo.put("description",obj.getDataDescription());
 				jo.put("type",obj.getDataType());
@@ -73,15 +74,15 @@ public class DecoderController {
 
     }
 	
-	@RequestMapping(value = "/decoders/{code}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public JSONObject getDecoderByCode(@PathVariable("code") String code) {
+	@RequestMapping(value = "/decoders/{id}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public JSONObject getDecoderById(@PathVariable("id") int id) {
 		try {
 			JSONObject res = new JSONObject();
-			DecoderEntity rs = decoderDao.getDecoderByCode(code);
+			DecoderEntity rs = decoderDao.getDecoderById(id);
 			res.put("id",rs.getId());
 			res.put("code",rs.getDataCode());
 			res.put("create",rs.getCreateTime());
-			res.put("data_block",rs.getDataBlockCode());
+			res.put("data_block",rs.getDataBlock());
 			res.put("name",rs.getDataName());		
 			res.put("description",rs.getDataDescription());
 			res.put("type",rs.getDataType());
@@ -103,7 +104,7 @@ public class DecoderController {
 	@RequestMapping(value = "/decoders", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public JSONObject createDecoder(
     		@RequestParam("code") String code,
-    		@RequestParam("data_block") String data_block,
+    		@RequestParam("data_block") int data_block,
     		@RequestParam("name") String name,
     		@RequestParam("description") String description,
     		@RequestParam("type") String type,
@@ -126,7 +127,7 @@ public class DecoderController {
 			res.put("result",rs);
 			res.put("id", st.getId());
 			//redis
-			JedisOperater.addDataDecoder(st.getDataBlockCode(), code, st.getJsonString());
+			JedisOperater.addDataDecoder( String.valueOf(st.getDataBlock()), st.getId(), st.getJsonString());
 			//return
 	        return ResponseUtil.success(res);			
 		} catch (Exception e) {
@@ -136,15 +137,30 @@ public class DecoderController {
 			return ResponseUtil.failureMore(502,e.getMessage(),res);
 		}
     }
-	@RequestMapping(value = "/decoders/{code}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
-    public JSONObject createDecoder(@PathVariable("code") String code ) {
+	@RequestMapping(value = "/decoders/{id}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
+    public JSONObject deleteDecoder(@PathVariable("id") int id, @RequestParam("ids") String ids) {
 		try {
+			List<String> idList = new ArrayList<String>();
+			int rs;
+			if( !ids.equals(null) && ids.length()>0 ) {
+				String input[] = ids.split(",");
+				if( input.length>0 ) {
+					for(int i = 0; i < input.length; i++) {
+						idList.add(input[i]);
+					}				
+				}	
+				if( idList.size() == 0) {
+					idList.add( String.valueOf(id) );
+				}
+				rs = deleteDecoderSingle(idList);					
+			}
+			else {
+				idList.add( String.valueOf(id) );
+				rs = deleteDecoderSingle(idList);					
+			}	
+			
 			JSONObject res = new JSONObject();
-			DecoderEntity st = decoderDao.getDecoderByCode(code);
-			int rs = decoderDao.deleteDecoder(code);
 			res.put("result",rs);
-			//redis
-			JedisOperater.removeDataDecoder(st.getDataBlockCode(), code);
 	        return ResponseUtil.success(res);			
 		} catch (Exception e) {
 			JSONObject res = new JSONObject();
@@ -152,9 +168,21 @@ public class DecoderController {
 			return ResponseUtil.failureMore(502,e.getMessage(),res);
 		}
     }
-	@RequestMapping(value = "/decoders/{code}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	
+	public int deleteDecoderSingle(List<String> idList) {
+		int rs=0;
+		for(int i=0;i<idList.size();i++) {
+			DecoderEntity st = decoderDao.getDecoderById( Integer.parseInt(idList.get(i)) );
+			//redis		
+			JedisOperater.removeDataDecoder( String.valueOf(st.getDataBlock()), Integer.parseInt(idList.get(i)) );
+			rs = rs + decoderDao.deleteDecoder( Integer.parseInt(idList.get(i)) );		
+		}
+		return rs;		
+	}
+	
+	@RequestMapping(value = "/decoders/{id}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
     public JSONObject updateDecoder(
-    		@PathVariable("code") String code,
+    		@PathVariable("id") int id,
     		@RequestParam("code") String code_new,
     		@RequestParam("data_block") String data_block,
     		@RequestParam("name") String name,
@@ -170,11 +198,12 @@ public class DecoderController {
     		@RequestParam("dictionary") String dictionary   		
     		) {
 		try {
-			DecoderEntity st = decoderDao.getDecoderByCode(code);
+			DecoderEntity st = decoderDao.getDecoderById(id);
+			JedisOperater.removeDataDecoder( String.valueOf(st.getDataBlock()), id );
 			if( !code_new.equals(null) && code_new.length()>0 )
 				st.setDataCode(code_new);
 			if( !data_block.equals(null) && data_block.length()>0 )
-				st.setDataBlockCode(data_block);
+				st.setDataBlock(Integer.parseInt(data_block));
 			if( !name.equals(null) && name.length()>0 )
 				st.setDataName(name);
 			if( !description.equals(null) && description.length()>0 )
@@ -198,10 +227,10 @@ public class DecoderController {
 			if( !dictionary.equals(null) && dictionary.length()>0 )
 				st.setDataDictionary(dictionary);		
 			JSONObject res = new JSONObject();
-			int rs = decoderDao.updateDecoder(code,st);
+			int rs = decoderDao.updateDecoder(id,st);
 			res.put("result",rs);
 			//redis
-			JedisOperater.addDataDecoder( st.getDataBlockCode(), code, st.getJsonString());
+			JedisOperater.addDataDecoder( String.valueOf(st.getDataBlock()), id, st.getJsonString());
 	        return ResponseUtil.success(res);			
 		} catch (Exception e) {
 			JSONObject res = new JSONObject();

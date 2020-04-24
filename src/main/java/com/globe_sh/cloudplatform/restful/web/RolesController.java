@@ -11,6 +11,8 @@ import com.globe_sh.cloudplatform.restful.entity.DataBlockEntity;
 import com.globe_sh.cloudplatform.restful.dao.DataBlockDAO;
 
 import com.globe_sh.cloudplatform.common.cache.JedisOperater;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import java.sql.Timestamp;
@@ -115,7 +117,7 @@ public class RolesController {
 		}
     }
 	@RequestMapping(value = "/factories/{code}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
-    public JSONObject createFactory(@PathVariable("code") String code ) {
+    public JSONObject deleteFactory(@PathVariable("code") String code ) {
 		try {
 			JSONObject res = new JSONObject();
 			int rs = factoryDao.deleteFactory(code);
@@ -199,7 +201,7 @@ public class RolesController {
 			}
 	    }
 		@RequestMapping(value = "/stations", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	    public JSONObject createStation(@RequestParam("code") String code,
+	    public JSONObject deleteStation(@RequestParam("code") String code,
 	    		@RequestParam("factory") String factory,
 	    		@RequestParam("name") String name,
 	    		@RequestParam("description") String description
@@ -400,11 +402,11 @@ public class RolesController {
 			}
 
 	    }
-		@RequestMapping(value = "/datablocks/{code}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	    public JSONObject getDataBlockByCode(@PathVariable("code") String code) {
+		@RequestMapping(value = "/datablocks/{id}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	    public JSONObject getDataBlockById(@PathVariable("id") int id) {
 			try {
 				JSONObject res = new JSONObject();
-				DataBlockEntity rs = dataBlockDao.getDataBlockByCode(code);
+				DataBlockEntity rs = dataBlockDao.getDataBlockById(id);
 				res.put("id",rs.getId());
 				res.put("code",rs.getDataBlockCode());
 				res.put("create",rs.getCreateTime());
@@ -430,6 +432,8 @@ public class RolesController {
 				int rs = dataBlockDao.insertDataBlock(st);
 				res.put("result",rs);
 				res.put("id", st.getId());
+				//redis
+				JedisOperater.addDataBlock( device+code, st.getId());				
 				//return
 		        return ResponseUtil.success(res);			
 			} catch (Exception e) {
@@ -439,11 +443,29 @@ public class RolesController {
 				return ResponseUtil.failureMore(502,e.getMessage(),res);
 			}
 	    }
-		@RequestMapping(value = "/datablocks/{code}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
-	    public JSONObject createDataBlock(@PathVariable("code") String code ) {
+		@RequestMapping(value = "/datablocks/{id}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
+	    public JSONObject deleteDataBlock(@PathVariable("id") int id,@RequestParam("ids") String ids ) {
 			try {
+				List<String> idList = new ArrayList<String>();
+				int rs;
+				if( !ids.equals(null) && ids.length()>0 ) {
+					String input[] = ids.split(",");
+					if( input.length>0 ) {
+						for(int i = 0; i < input.length; i++) {
+							idList.add(input[i]);
+						}
+					}
+					if( idList.size() == 0) {
+						idList.add( String.valueOf(id) );
+					}
+					rs = deleteDataBlockSingle(idList);					
+				}
+				else {
+					idList.add( String.valueOf(id) );
+					rs = deleteDataBlockSingle(idList);					
+				}			
+				
 				JSONObject res = new JSONObject();
-				int rs = dataBlockDao.deleteDataBlock(code);
 				res.put("result",rs);
 		        return ResponseUtil.success(res);			
 			} catch (Exception e) {
@@ -452,18 +474,30 @@ public class RolesController {
 				return ResponseUtil.failureMore(502,e.getMessage(),res);
 			}
 	    }
-		@RequestMapping(value = "/datablocks/{code}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+		
+		public int deleteDataBlockSingle(List<String> idList) {
+			int rs=0;
+			for(int i=0;i<idList.size();i++) {
+				DataBlockEntity st = dataBlockDao.getDataBlockById( Integer.parseInt(idList.get(i)) );				
+				JedisOperater.removeDataBlock( st.getDeviceCode() + st.getDataBlockCode() );
+				rs = rs + dataBlockDao.deleteDataBlock( Integer.parseInt(idList.get(i)) );					
+			}
+			return rs;
+		}
+		
+		@RequestMapping(value = "/datablocks/{id}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	    public JSONObject updateDataBlock(
-	    		@PathVariable("code") String code,
-	    		@RequestParam("code") String code_new,
+	    		@PathVariable("id") int id,
+	    		@RequestParam("code") String code,
 	    		@RequestParam("device") String device,
 	    		@RequestParam("name") String name,
 	    		@RequestParam("description") String description
 	    		) {
 			try {
-				DataBlockEntity st = dataBlockDao.getDataBlockByCode(code);
-				if( !code_new.equals(null) && code_new.length()>0 )
-					st.setDataBlockCode(code_new);
+				DataBlockEntity st = dataBlockDao.getDataBlockById(id);
+				JedisOperater.removeDataBlock( st.getDeviceCode() + st.getDataBlockCode() );
+				if( !code.equals(null) && code.length()>0 )
+					st.setDataBlockCode(code);
 				if( !device.equals(null) && device.length()>0 )
 					st.setDeviceCode(device);
 				if( !name.equals(null) && name.length()>0 )
@@ -472,8 +506,9 @@ public class RolesController {
 					st.setDataBlockDescription(description);	
 				
 				JSONObject res = new JSONObject();
-				int rs = dataBlockDao.updateDataBlock(code,st);
+				int rs = dataBlockDao.updateDataBlock(id,st);
 				res.put("result",rs);			
+				JedisOperater.addDataBlock( st.getDeviceCode() + st.getDataBlockCode() , st.getId());
 		        return ResponseUtil.success(res);			
 			} catch (Exception e) {
 				JSONObject res = new JSONObject();

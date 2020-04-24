@@ -11,7 +11,7 @@ public class DecoderEntity implements Serializable {
 	private int id;
 	private String data_code;
 	private String create_time;
-	private String data_block_code;
+	private int data_block;
 	private String data_name;
 	private String data_description;
 	private String data_type;
@@ -27,14 +27,14 @@ public class DecoderEntity implements Serializable {
 	public DecoderEntity() {
 	}
 	
-	public DecoderEntity(int id, String dataCode, String createTime, String dataBlockCode,
+	public DecoderEntity(int id, String dataCode, String createTime, int dataBlock,
 			String dataName, String dataDescription, String dataType, String dataKind,
 			int startByte, int startBit, int dataLength, float dataPrecision, 
 			int dataDeviation, int dataUnit, String dataDictionary) {
 		this.id = id;
 		this.data_code = dataCode;
 		this.create_time = createTime;
-		this.data_block_code = dataBlockCode;
+		this.data_block = dataBlock;
 		this.data_name = dataName;
 		this.data_description = dataDescription;
 		this.data_type = dataType;
@@ -66,11 +66,11 @@ public class DecoderEntity implements Serializable {
 	public void setCreateTime(String createTime) {
 		this.create_time = createTime;
 	}
-	public String getDataBlockCode() {
-		return data_block_code;
+	public int getDataBlock() {
+		return data_block;
 	}
-	public void setDataBlockCode(String dataBlockCode) {
-		this.data_block_code = dataBlockCode;
+	public void setDataBlock(int dataBlock) {
+		this.data_block = dataBlock;
 	}	
 	public String getDataName() {
 		return data_name;
@@ -143,7 +143,7 @@ public class DecoderEntity implements Serializable {
 		json.put("id", this.id);
 		json.put("data_code", this.data_code);
 		json.put("create_time", this.create_time);
-		json.put("data_block_code", this.data_block_code);
+		json.put("data_block", this.data_block);
 		json.put("data_name", this.data_name);
 		json.put("data_description", this.data_description);
 		json.put("data_type", this.data_type);
