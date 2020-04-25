@@ -41,7 +41,7 @@ public interface DecoderDAO {
     		"data_precision=#{st.data_precision}, " +
     		"data_deviation=#{st.data_deviation}, " +
     		"data_unit=#{st.data_unit}, " +
-    		"data_name=#{st.data_dictionary} " +
+    		"data_dictionary=#{st.data_dictionary} " +
     		"WHERE id = #{id}")
     public int updateDecoder(@Param("id") int id, @Param("st") DecoderEntity st);      
 }

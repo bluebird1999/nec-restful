@@ -103,26 +103,53 @@ public class DecoderController {
 	
 	@RequestMapping(value = "/decoders", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public JSONObject createDecoder(
-    		@RequestParam("code") String code,
-    		@RequestParam("data_block") int data_block,
-    		@RequestParam("name") String name,
-    		@RequestParam("description") String description,
-    		@RequestParam("type") String type,
-    		@RequestParam("kind") String kind,
-    		@RequestParam("start_byte") int start_byte,
-    		@RequestParam("start_bit") int start_bit,
-    		@RequestParam("length") int length,
-    		@RequestParam("precision") float precision,
-    		@RequestParam("deviation") int deviation,
-    		@RequestParam("unit") int unit,
-    		@RequestParam("dictionary") String dictionary    		
+    		@RequestParam(value="code") String code,
+    		@RequestParam(value="data_block",required=false) String data_block,
+    		@RequestParam(value="name",required=false) String name,
+    		@RequestParam(value="description",required=false) String description,
+    		@RequestParam(value="type") String type,
+    		@RequestParam(value="kind",required=false) String kind,
+    		@RequestParam(value="start_byte") String start_byte,
+    		@RequestParam(value="start_bit") String start_bit,
+    		@RequestParam(value="length") String length,
+    		@RequestParam(value="precision",required=false) String precision,
+    		@RequestParam(value="deviation",required=false) String deviation,
+    		@RequestParam(value="unit",required=false) String unit,
+    		@RequestParam(value="dictionary",required=false) String dictionary    		
     			) {
 		try {
+			float pre;
 			JSONObject res = new JSONObject();
 			String dt = StaticMethod.getTimeString(0);
-			DecoderEntity st = new DecoderEntity(0,code,dt,data_block,name,description,
-					type,kind,start_byte,start_bit,length,precision,deviation,unit,dictionary
-					);
+			if( precision==null || precision.length()==0) {
+				pre = 1.0f;
+			}
+			else {
+				pre = Float.parseFloat(precision);
+			}
+			DecoderEntity st = new DecoderEntity();
+			st.setDataCode(code);
+			if( data_block!=null && data_block.length()>0 )
+				st.setDataBlock(Integer.parseInt(data_block));
+			st.setCreateTime(dt);
+			if( name!=null && name.length()>0 )
+				st.setDataName(name);
+			if( description!=null && description.length()>0 )
+				st.setDataDescription(description);	
+			st.setDataType(type);
+			if( kind!=null && kind.length()>0 )
+				st.setDataKind(kind);
+			st.setStartByte(Integer.parseInt(start_byte));			
+			st.setStartBit(Integer.parseInt(start_bit));
+			st.setDataLength(Integer.parseInt(length));
+			st.setDataPrecision(pre);
+			if( deviation!=null && deviation.length()>0 )
+				st.setDataDeviation(Integer.parseInt(deviation));
+			if( unit!=null && unit.length()>0 )
+				st.setDataUnit(Integer.parseInt(unit));
+			if( dictionary!=null && dictionary.length()>0 )
+				st.setDataDictionary(dictionary);	
+			logger.info("code="+code);
 			int rs = decoderDao.insertDecoder(st);
 			res.put("result",rs);
 			res.put("id", st.getId());
@@ -138,11 +165,13 @@ public class DecoderController {
 		}
     }
 	@RequestMapping(value = "/decoders/{id}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
-    public JSONObject deleteDecoder(@PathVariable("id") int id, @RequestParam("ids") String ids) {
+    public JSONObject deleteDecoder(
+    		@PathVariable("id") int id, 
+    		@RequestParam(value="ids",required=false) String ids) {
 		try {
 			List<String> idList = new ArrayList<String>();
 			int rs;
-			if( !ids.equals(null) && ids.length()>0 ) {
+			if( ids!=null && ids.length()>0 ) {
 				String input[] = ids.split(",");
 				if( input.length>0 ) {
 					for(int i = 0; i < input.length; i++) {
@@ -183,48 +212,48 @@ public class DecoderController {
 	@RequestMapping(value = "/decoders/{id}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
     public JSONObject updateDecoder(
     		@PathVariable("id") int id,
-    		@RequestParam("code") String code_new,
-    		@RequestParam("data_block") String data_block,
-    		@RequestParam("name") String name,
-    		@RequestParam("description") String description,
-    		@RequestParam("type") String type,
-    		@RequestParam("kind") String kind,
-    		@RequestParam("start_byte") String start_byte,
-    		@RequestParam("start_bit") String start_bit,
-    		@RequestParam("length") String length,
-    		@RequestParam("precision") String precision,
-    		@RequestParam("deviation") String deviation,
-    		@RequestParam("unit") String unit,
-    		@RequestParam("dictionary") String dictionary   		
+    		@RequestParam(value="code",required=false) String code_new,
+    		@RequestParam(value="data_block",required=false) String data_block,
+    		@RequestParam(value="name",required=false) String name,
+    		@RequestParam(value="description",required=false) String description,
+    		@RequestParam(value="type",required=false) String type,
+    		@RequestParam(value="kind",required=false) String kind,
+    		@RequestParam(value="start_byte",required=false) String start_byte,
+    		@RequestParam(value="start_bit",required=false) String start_bit,
+    		@RequestParam(value="length",required=false) String length,
+    		@RequestParam(value="precision",required=false) String precision,
+    		@RequestParam(value="deviation",required=false) String deviation,
+    		@RequestParam(value="unit",required=false) String unit,
+    		@RequestParam(value="dictionary",required=false) String dictionary   		
     		) {
 		try {
 			DecoderEntity st = decoderDao.getDecoderById(id);
 			JedisOperater.removeDataDecoder( String.valueOf(st.getDataBlock()), id );
-			if( !code_new.equals(null) && code_new.length()>0 )
+			if( code_new!=null && code_new.length()>0 )
 				st.setDataCode(code_new);
-			if( !data_block.equals(null) && data_block.length()>0 )
+			if( data_block!=null && data_block.length()>0 )
 				st.setDataBlock(Integer.parseInt(data_block));
-			if( !name.equals(null) && name.length()>0 )
+			if( name!=null && name.length()>0 )
 				st.setDataName(name);
-			if( !description.equals(null) && description.length()>0 )
+			if( description!=null && description.length()>0 )
 				st.setDataDescription(description);	
-			if( !type.equals(null) && type.length()>0 )
+			if( type!=null && type.length()>0 )
 				st.setDataType(type);
-			if( !kind.equals(null) && kind.length()>0 )
+			if( kind!=null && kind.length()>0 )
 				st.setDataKind(kind);
-			if( !start_byte.equals(null) && start_byte.length()>0 )
+			if( start_byte!=null && start_byte.length()>0 )
 				st.setStartByte(Integer.parseInt(start_byte));			
-			if( !start_bit.equals(null) && start_bit.length()>0 )
+			if( start_bit!=null && start_bit.length()>0 )
 				st.setStartBit(Integer.parseInt(start_bit));
-			if( !length.equals(null) && length.length()>0 )
+			if( length!=null && length.length()>0 )
 				st.setDataLength(Integer.parseInt(length));
-			if( !precision.equals(null) && precision.length()>0 )
+			if( precision!=null && precision.length()>0 )
 				st.setDataPrecision(Float.parseFloat(precision));
-			if( !deviation.equals(null) && deviation.length()>0 )
+			if( deviation!=null && deviation.length()>0 )
 				st.setDataDeviation(Integer.parseInt(deviation));
-			if( !unit.equals(null) && unit.length()>0 )
+			if( unit!=null && unit.length()>0 )
 				st.setDataUnit(Integer.parseInt(unit));
-			if( !dictionary.equals(null) && dictionary.length()>0 )
+			if( dictionary!=null && dictionary.length()>0 )
 				st.setDataDictionary(dictionary);		
 			JSONObject res = new JSONObject();
 			int rs = decoderDao.updateDecoder(id,st);

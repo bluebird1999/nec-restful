@@ -37,31 +37,18 @@ public class DataController {
 	
 	private static Logger logger = org.apache.logging.log4j.LogManager.getLogger(RolesController.class);
 	  
-	@RequestMapping(value = "/data", params = { "station","device","datablock","data","start","end" }, 
-			method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/data", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public JSONObject getData(
-    								@RequestParam("station") String station,
-    								@RequestParam("device") String device,
-    								@RequestParam("datablock") String datablock,
-    								@RequestParam("data") String data,
-    								@RequestParam("start") String start,
-    								@RequestParam("end") String end
+    								@RequestParam(value="station",required=false) String station,
+    								@RequestParam(value="device",required=false) String device,
+    								@RequestParam(value="datablock",required=false) String datablock,
+    								@RequestParam(value="data",required=false) String data,
+    								@RequestParam(value="start",required=false) String start,
+    								@RequestParam(value="end",required=false) String end
     		)	{
 		try {
 			JSONArray res = new JSONArray();
-/*			String sql = new String();
-			sql = " and 1=1";
-			if( station.length()>0 ) sql += " and station='" + station + "'";
-			if( device.length()>0 ) sql += " and device='" + device + "'";
-			if( datablock.length()>0 ) sql += " and data_block='" + datablock + "'";
-			if( data.length()>0 ) sql += " and code='" + data + "'";
-			if( start.length()>0 ) sql += " and sample_time>='" + start + "'";
-			if( end.length()>0 ) sql += " and sample_time<='" + end + "'";
-
-			logger.info("sql::" + sql);*/
-
 			List<DataEntity> rs = dataDao.getData(station,device,datablock,data,start,end);
-			logger.info("mysql result size=" + rs.size());
 			for( DataEntity obj: rs)
 			{
 				JSONObject jo = new JSONObject();

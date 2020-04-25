@@ -96,9 +96,10 @@ public class RolesController {
 		}
     }
 	@RequestMapping(value = "/factories", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public JSONObject createFactory(@RequestParam("code") String code,
-    		@RequestParam("name") String name,
-    		@RequestParam("description") String description
+    public JSONObject createFactory(
+    		@RequestParam(value="code") String code,
+    		@RequestParam(value="name",required=false) String name,
+    		@RequestParam(value="description",required=false) String description
     			) {
 		try {
 			JSONObject res = new JSONObject();
@@ -132,17 +133,17 @@ public class RolesController {
 	@RequestMapping(value = "/factories/{code}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
     public JSONObject updateFactory(
     		@PathVariable("code") String code,
-    		@RequestParam("code") String code_new,
-    		@RequestParam("name") String name,
-    		@RequestParam("description") String description
+    		@RequestParam(value="code",required=false) String code_new,
+    		@RequestParam(value="name",required=false) String name,
+    		@RequestParam(value="description",required=false) String description
     		) {
 		try {
 			FactoryEntity st = factoryDao.getFactoryByCode(code);
-			if( !code_new.equals(null) && code_new.length()>0 )
+			if( code_new!=null && code_new.length()>0 )
 				st.setFactoryCode(code_new);
-			if( !name.equals(null) && name.length()>0 )
+			if( name!=null && name.length()>0 )
 				st.setFactoryName(name);
-			if( !description.equals(null) && description.length()>0 )
+			if( description!=null && description.length()>0 )
 				st.setFactoryDescription(description);	
 			
 			JSONObject res = new JSONObject();
@@ -201,10 +202,11 @@ public class RolesController {
 			}
 	    }
 		@RequestMapping(value = "/stations", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	    public JSONObject deleteStation(@RequestParam("code") String code,
-	    		@RequestParam("factory") String factory,
-	    		@RequestParam("name") String name,
-	    		@RequestParam("description") String description
+	    public JSONObject deleteStation(
+	    		@RequestParam(value="code") String code,
+	    		@RequestParam(value="factory") String factory,
+	    		@RequestParam(value="name",required=false) String name,
+	    		@RequestParam(value="description",required=false) String description
 	    			) {
 			try {
 				JSONObject res = new JSONObject();
@@ -242,27 +244,31 @@ public class RolesController {
 		@RequestMapping(value = "/stations/{code}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	    public JSONObject updateStation(
 	    		@PathVariable("code") String code,
-	    		@RequestParam("code") String code_new,
-	    		@RequestParam("factory") String factory,
-	    		@RequestParam("name") String name,
-	    		@RequestParam("description") String description
+	    		@RequestParam(value="code",required=false) String code_new,
+	    		@RequestParam(value="factory",required=false) String factory,
+	    		@RequestParam(value="name",required=false) String name,
+	    		@RequestParam(value="description",required=false) String description
 	    		) {
 			try {
 				StationEntity st = stationDao.getStationByCode(code);
-				if( !code_new.equals(null) && code_new.length()>0 )
+				if( code_new!=null && code_new.length()>0 ) {
 					st.setStationCode(code_new);
-				if( !factory.equals(null) && factory.length()>0 )
+				}
+				if( factory!=null && factory.length()>0 ) {
 					st.setFactoryCode(factory);
-				if( !name.equals(null) && name.length()>0 )
+				}
+				if( name!=null && name.length()>0 ) {
 					st.setStationName(name);
-				if( !description.equals(null) && description.length()>0 )
-					st.setStationDescription(description);	
-				
+				}
+				if( description!=null && description.length()>0 ) {
+					st.setStationDescription(description);
+				}
 				JSONObject res = new JSONObject();
 				int rs = stationDao.updateStation(code,st);
 				res.put("result",rs);
 				//redis
-				JedisOperater.addStation(code, st.getJsonString());				
+				JedisOperater.removeStation(code);
+				JedisOperater.addStation(st.getStationCode(), st.getJsonString());				
 		        return ResponseUtil.success(res);			
 			} catch (Exception e) {
 				JSONObject res = new JSONObject();
@@ -314,9 +320,9 @@ public class RolesController {
 	    }
 		@RequestMapping(value = "/devices", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	    public JSONObject createDevice(@RequestParam("code") String code,
-	    		@RequestParam("station") String station,
-	    		@RequestParam("name") String name,
-	    		@RequestParam("description") String description
+	    		@RequestParam(value="station") String station,
+	    		@RequestParam(value="name",required=false) String name,
+	    		@RequestParam(value="description",required=false) String description
 	    			) {
 			try {
 				JSONObject res = new JSONObject();
@@ -350,20 +356,20 @@ public class RolesController {
 		@RequestMapping(value = "/devices/{code}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	    public JSONObject updateDevice(
 	    		@PathVariable("code") String code,
-	    		@RequestParam("code") String code_new,
-	    		@RequestParam("station") String station,
-	    		@RequestParam("name") String name,
-	    		@RequestParam("description") String description
+	    		@RequestParam(value="code",required=false) String code_new,
+	    		@RequestParam(value="station",required=false) String station,
+	    		@RequestParam(value="name",required=false) String name,
+	    		@RequestParam(value="description",required=false) String description
 	    		) {
 			try {
 				DeviceEntity st = deviceDao.getDeviceByCode(code);
-				if( !code_new.equals(null) && code_new.length()>0 )
+				if( code_new!=null && code_new.length()>0 )
 					st.setDeviceCode(code_new);
-				if( !station.equals(null) && station.length()>0 )
+				if( station!=null && station.length()>0 )
 					st.setStationCode(station);
-				if( !name.equals(null) && name.length()>0 )
+				if( name!=null && name.length()>0 )
 					st.setDeviceName(name);
-				if( !description.equals(null) && description.length()>0 )
+				if( description!=null && description.length()>0 )
 					st.setDeviceDescription(description);	
 				
 				JSONObject res = new JSONObject();
@@ -420,10 +426,11 @@ public class RolesController {
 			}
 	    }
 		@RequestMapping(value = "/datablocks", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	    public JSONObject createDataBlock(@RequestParam("code") String code,
-	    		@RequestParam("device") String device,
-	    		@RequestParam("name") String name,
-	    		@RequestParam("description") String description
+	    public JSONObject createDataBlock(
+	    		@RequestParam(value="code") String code,
+	    		@RequestParam(value="device") String device,
+	    		@RequestParam(value="name",required=false) String name,
+	    		@RequestParam(value="description",required=false) String description
 	    			) {
 			try {
 				JSONObject res = new JSONObject();
@@ -444,11 +451,13 @@ public class RolesController {
 			}
 	    }
 		@RequestMapping(value = "/datablocks/{id}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
-	    public JSONObject deleteDataBlock(@PathVariable("id") int id,@RequestParam("ids") String ids ) {
+	    public JSONObject deleteDataBlock(
+	    		@PathVariable("id") int id,
+	    		@RequestParam(value="ids",required=false) String ids ) {
 			try {
 				List<String> idList = new ArrayList<String>();
 				int rs;
-				if( !ids.equals(null) && ids.length()>0 ) {
+				if( ids!=null && ids.length()>0 ) {
 					String input[] = ids.split(",");
 					if( input.length>0 ) {
 						for(int i = 0; i < input.length; i++) {
@@ -488,21 +497,21 @@ public class RolesController {
 		@RequestMapping(value = "/datablocks/{id}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	    public JSONObject updateDataBlock(
 	    		@PathVariable("id") int id,
-	    		@RequestParam("code") String code,
-	    		@RequestParam("device") String device,
-	    		@RequestParam("name") String name,
-	    		@RequestParam("description") String description
+	    		@RequestParam(value="code",required=false) String code,
+	    		@RequestParam(value="device",required=false) String device,
+	    		@RequestParam(value="name",required=false) String name,
+	    		@RequestParam(value="description",required=false) String description
 	    		) {
 			try {
 				DataBlockEntity st = dataBlockDao.getDataBlockById(id);
 				JedisOperater.removeDataBlock( st.getDeviceCode() + st.getDataBlockCode() );
-				if( !code.equals(null) && code.length()>0 )
+				if( code!=null && code.length()>0 )
 					st.setDataBlockCode(code);
-				if( !device.equals(null) && device.length()>0 )
+				if( device!=null && device.length()>0 )
 					st.setDeviceCode(device);
-				if( !name.equals(null) && name.length()>0 )
+				if( name!=null && name.length()>0 )
 					st.setDataBlockName(name);
-				if( !description.equals(null) && description.length()>0 )
+				if( description!=null && description.length()>0 )
 					st.setDataBlockDescription(description);	
 				
 				JSONObject res = new JSONObject();
