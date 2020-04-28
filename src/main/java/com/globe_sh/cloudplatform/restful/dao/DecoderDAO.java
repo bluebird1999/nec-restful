@@ -19,6 +19,7 @@ public interface DecoderDAO {
  //   public List < DecoderEntity > getDecoderAll();
 
     public List < DecoderEntity > getDecoderAll(
+    		@Param("factory") String factory,
     		@Param("station") String station,
     		@Param("device") String device,
     		@Param("datablock") String datablock

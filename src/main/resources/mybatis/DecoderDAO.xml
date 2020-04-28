@@ -3,9 +3,12 @@
 <mapper namespace="com.globe_sh.cloudplatform.restful.dao.DecoderDAO">        
     <select id="getDecoderAll" parameterType="String" resultType="com.globe_sh.cloudplatform.restful.entity.DecoderEntity">
         select r.*  
-        from c_device d, c_data_block b, c_data_decoder r
+        from c_station s, c_device d, c_data_block b, c_data_decoder r
         <where>
-        	r.data_block=b.id and b.device_code=d.device_code
+        	r.data_block=b.id and b.device_code=d.device_code and d.station_code=s.station_code
+        	<if test="factory != null and factory != ''">
+				and	s.factory_code = #{factory}
+			</if>        	
         	<if test="station != null and station != ''">
 				and	d.station_code = #{station}
 			</if>

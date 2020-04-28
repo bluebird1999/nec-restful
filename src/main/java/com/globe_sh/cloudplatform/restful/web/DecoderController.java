@@ -42,13 +42,14 @@ public class DecoderController {
 	  
 	@RequestMapping(value = "/decoders", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public JSONObject getDecoderAll(
+    		@RequestParam(value="factory",required=false) String factory,
     		@RequestParam(value="station",required=false) String station,
 			@RequestParam(value="device",required=false) String device,
 			@RequestParam(value="datablock",required=false) String datablock  		
     		) {
 		try {
 			JSONArray res = new JSONArray();
-			List<DecoderEntity> rs = decoderDao.getDecoderAll(station,device,datablock);
+			List<DecoderEntity> rs = decoderDao.getDecoderAll(factory,station,device,datablock);
 			
 			for( DecoderEntity obj: rs)
 			{
