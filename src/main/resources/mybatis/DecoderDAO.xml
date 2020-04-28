@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globe_sh.cloudplatform.restful.dao.DecoderDAO">        
+    <select id="getDecoderAll" parameterType="String" resultType="com.globe_sh.cloudplatform.restful.entity.DecoderEntity">
+        select r.*  
+        from c_device d, c_data_block b, c_data_decoder r
+        <where>
+        	r.data_block=b.id and b.device_code=d.device_code
+        	<if test="station != null and station != ''">
+				and	d.station_code = #{station}
+			</if>
+        	<if test="device != null and device != ''">
+				and	b.device_code = #{device}
+			</if>
+        	<if test="datablock != null and datablock !='' ">
+				and	r.data_block = #{datablock}
+			</if>												
+        </where>   
+    </select>
+</mapper>

@@ -9,13 +9,21 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.Param;
+
+import com.globe_sh.cloudplatform.restful.entity.DataEntity;
 import com.globe_sh.cloudplatform.restful.entity.DecoderEntity;
 
 @Mapper
 public interface DecoderDAO {
-    @Select("select * from c_data_decoder")
-    public List < DecoderEntity > getDecoderAll();
+ //   @Select("select * from c_data_decoder")
+ //   public List < DecoderEntity > getDecoderAll();
 
+    public List < DecoderEntity > getDecoderAll(
+    		@Param("station") String station,
+    		@Param("device") String device,
+    		@Param("datablock") String datablock
+    		);
+    
     @Select("SELECT * FROM c_data_decoder WHERE id = #{id}")
     public DecoderEntity getDecoderById(@Param("id") int id);
 

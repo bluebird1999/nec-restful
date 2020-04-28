@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,10 +41,14 @@ public class DecoderController {
 	private static Logger logger = org.apache.logging.log4j.LogManager.getLogger(RolesController.class);
 	  
 	@RequestMapping(value = "/decoders", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public JSONObject getDecoderAll() {
+    public JSONObject getDecoderAll(
+    		@RequestParam(value="station",required=false) String station,
+			@RequestParam(value="device",required=false) String device,
+			@RequestParam(value="datablock",required=false) String datablock  		
+    		) {
 		try {
 			JSONArray res = new JSONArray();
-			List<DecoderEntity> rs = decoderDao.getDecoderAll();
+			List<DecoderEntity> rs = decoderDao.getDecoderAll(station,device,datablock);
 			
 			for( DecoderEntity obj: rs)
 			{
@@ -100,9 +105,85 @@ public class DecoderController {
 			return ResponseUtil.failureMore(502,e.getMessage(),res);
 		}
     }
-	
 	@RequestMapping(value = "/decoders", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public JSONObject createDecoder(
+    public JSONObject createDecoder(@RequestBody JSONArray jsonParam) {
+		try {
+			JSONObject decoder = null;
+			float pre;
+			JSONObject res = new JSONObject();
+			String dt = StaticMethod.getTimeString(0);
+			//iterate
+			for(int i = 0; i < jsonParam.size(); i++) {
+				decoder = jsonParam.getJSONObject(i);
+				if(decoder!=null) {
+					DecoderEntity st = new DecoderEntity();
+					if(decoder.containsKey("precision"))
+						 pre = decoder.getFloat("precision");
+					else
+						pre = 1.0f;
+					//required parameters
+					st.setCreateTime(dt);
+					if(decoder.containsKey("code"))
+						if( decoder.getString("code").length()>0)
+							st.setDataCode(decoder.getString("code"));
+						else
+							continue;
+					else
+						continue;
+					if(decoder.containsKey("type"))
+						if( decoder.getString("type").length()>0)
+							st.setDataType(decoder.getString("type"));
+						else
+							continue;
+					else
+						continue;
+					if(decoder.containsKey("start_byte"))
+						st.setStartByte(decoder.getIntValue("start_byte"));
+					else
+						continue;
+					if(decoder.containsKey("start_bit"))
+						st.setStartBit(decoder.getIntValue("start_bit"));
+					else
+						continue;
+					if(decoder.containsKey("length"))
+						st.setDataLength(decoder.getIntValue("length"));
+					else
+						continue;
+					//other fileds
+					if(decoder.containsKey("data_block"))
+						st.setDataBlock(decoder.getIntValue("data_block"));
+					if(decoder.containsKey("name"))
+						st.setDataName(decoder.getString("name"));
+					if(decoder.containsKey("description"))
+						st.setDataDescription(decoder.getString("description"));
+					if(decoder.containsKey("kind"))
+						st.setDataKind(decoder.getString("kind"));
+					st.setDataPrecision(pre);
+					if(decoder.containsKey("deviation"))
+						st.setDataDeviation(decoder.getIntValue("deviation"));					
+					if(decoder.containsKey("unit"))
+						st.setDataUnit(decoder.getIntValue("unit"));
+					if(decoder.containsKey("dictionary"))
+						st.setDataDictionary(decoder.getString("dictionary"));					
+					int rs = decoderDao.insertDecoder(st);
+					res.put("result",rs);
+					res.put("id", st.getId());
+					//redis
+					JedisOperater.addDataDecoder( String.valueOf(st.getDataBlock()), st.getId(), st.getJsonString());						
+				}
+			}
+			//return
+	        return ResponseUtil.success(res);			
+		} catch (Exception e) {
+			JSONObject res = new JSONObject();
+			res.put("result",0);
+			res.put("id", -1);
+			return ResponseUtil.failureMore(502,e.getMessage(),res);
+		}
+    }	
+/*	
+	@RequestMapping(value = "/decoders", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public JSONObject createDecoderGroup(
     		@RequestParam(value="code") String code,
     		@RequestParam(value="data_block",required=false) String data_block,
     		@RequestParam(value="name",required=false) String name,
@@ -164,6 +245,7 @@ public class DecoderController {
 			return ResponseUtil.failureMore(502,e.getMessage(),res);
 		}
     }
+*/    
 	@RequestMapping(value = "/decoders/{id}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
     public JSONObject deleteDecoder(
     		@PathVariable("id") int id, 
