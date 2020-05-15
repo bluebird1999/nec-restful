@@ -34,9 +34,11 @@ public interface DataDAO {
     		"i_decoded_data.data_batch_id = i_decoded_data_batch.data_batch_id) as abc where #{sql}")
 */    		
 //    public List <DataEntity> getData(@Param("st") String st);
-    public List < DataEntity > getData(@Param("station") String station,
+    public List < DataEntity > getData(
+    		@Param("factory") String factory,
+    		@Param("line") String line,
     		@Param("device") String device,
-    		@Param("datablock") String datablock,
+    		@Param("data_block") String data_block,
     		@Param("data") String data,
     		@Param("start") String start,
     		@Param("end") String end

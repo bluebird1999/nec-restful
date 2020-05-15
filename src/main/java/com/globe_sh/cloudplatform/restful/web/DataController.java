@@ -35,11 +35,12 @@ public class DataController {
 	@Autowired
 	private DataDAO dataDao;
 	
-	private static Logger logger = org.apache.logging.log4j.LogManager.getLogger(RolesController.class);
+	private static Logger logger = org.apache.logging.log4j.LogManager.getLogger(DataController.class);
 	  
 	@RequestMapping(value = "/data", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public JSONObject getData(
-    								@RequestParam(value="station",required=false) String station,
+    								@RequestParam(value="factory",required=false) String factory,
+    								@RequestParam(value="line",required=false) String line,
     								@RequestParam(value="device",required=false) String device,
     								@RequestParam(value="datablock",required=false) String datablock,
     								@RequestParam(value="data",required=false) String data,
@@ -48,12 +49,13 @@ public class DataController {
     		)	{
 		try {
 			JSONArray res = new JSONArray();
-			List<DataEntity> rs = dataDao.getData(station,device,datablock,data,start,end);
+			List<DataEntity> rs = dataDao.getData(factory,line,device,datablock,data,start,end);
 			for( DataEntity obj: rs)
 			{
 				JSONObject jo = new JSONObject();
 				jo.put("time",obj.getSampleTime());
-				jo.put("station",obj.getStation());
+				jo.put("factory",obj.getFactory());
+				jo.put("line",obj.getLine());				
 				jo.put("device",obj.getDevice());
 				jo.put("data_block",obj.getDataBlock());		
 				jo.put("data",obj.getCode());

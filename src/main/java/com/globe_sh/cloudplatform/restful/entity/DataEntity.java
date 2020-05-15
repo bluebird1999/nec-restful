@@ -7,21 +7,25 @@ public class DataEntity implements Serializable {
 	private static final long serialVersionUID = 3558195671797896609L;
 
 	private String sample_time;
-	private String station;
-	private String device;
+	private int factory;
+	private int line;
+	private int device;
 	private int data_block;
+	private int station;
 	private int code;
 	private String value;
 
 	public DataEntity() {
 	}
 	
-	public DataEntity(String sampleTime, String station, String device, 
-			int dataBlock, int code, String value) {
+	public DataEntity(String sampleTime, int factory, int line, int device, 
+			int dataBlock, int station, int code, String value) {
 		this.sample_time = sampleTime;
-		this.station = station;
+		this.factory = factory;
+		this.line = line;
 		this.device = device;
 		this.data_block = dataBlock;
+		this.station = station;
 		this.code = code;
 		this.value = value;
 	}
@@ -31,17 +35,23 @@ public class DataEntity implements Serializable {
 	}
 	public void setSampleTime(String sampleTime) {
 		this.sample_time = sampleTime;
+	}
+	public int getFactory() {
+		return factory;
+	}
+	public void setFactory(int factory) {
+		this.factory = factory;
 	}	
-	public String getStation() {
-		return station;
+	public int getLine() {
+		return line;
 	}
-	public void setStation(String station) {
-		this.station = station;
+	public void setLine(int line) {
+		this.line = line;
 	}
-	public String getDevice() {
+	public int getDevice() {
 		return device;
 	}
-	public void setDevice(String device) {
+	public void setDevice(int device) {
 		this.device = device;
 	}
 	public int getDataBlock() {
@@ -50,6 +60,12 @@ public class DataEntity implements Serializable {
 	public void setDataBlock(int dataBlock) {
 		this.data_block = dataBlock;
 	}
+	public int getStation() {
+		return station;
+	}
+	public void setStation(int station) {
+		this.station = station;
+	}	
 	public int getCode() {
 		return code;
 	}

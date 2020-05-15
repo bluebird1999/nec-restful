@@ -15,18 +15,18 @@ import com.globe_sh.cloudplatform.restful.entity.DecoderEntity;
 
 @Mapper
 public interface DecoderDAO {
- //   @Select("select * from c_data_decoder")
- //   public List < DecoderEntity > getDecoderAll();
+	@Select("select * from c_data_decoder")
+   	public List < DecoderEntity > getDecoderAll();
 
-    public List < DecoderEntity > getDecoderAll(
+    public List < DecoderEntity > getDecoderAllParam(
     		@Param("factory") String factory,
-    		@Param("station") String station,
+    		@Param("line") String line,
     		@Param("device") String device,
-    		@Param("datablock") String datablock
+    		@Param("data_block") String data_block
     		);
     
     @Select("SELECT * FROM c_data_decoder WHERE id = #{id}")
-    public DecoderEntity getDecoderById(@Param("id") int id);
+    public DecoderEntity getDecoder(@Param("id") int id);
 
     @Insert("INSERT INTO c_data_decoder (data_code, create_time, data_block, data_name, data_description," +
     		" data_type, data_kind, start_byte, start_bit, data_length, data_precision, data_deviation, " +

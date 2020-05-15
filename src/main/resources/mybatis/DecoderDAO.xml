@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.globe_sh.cloudplatform.restful.dao.DecoderDAO">        
-    <select id="getDecoderAll" parameterType="String" resultType="com.globe_sh.cloudplatform.restful.entity.DecoderEntity">
+    <select id="getDecoderAllParam" parameterType="String" resultType="com.globe_sh.cloudplatform.restful.entity.DecoderEntity">
         select r.*  
-        from c_station s, c_device d, c_data_block b, c_data_decoder r
+        from c_line l, c_device d, c_data_block b, c_data_decoder r
         <where>
-        	r.data_block=b.id and b.device_code=d.device_code and d.station_code=s.station_code
+        	<if test="factory != null or line!=null or device!=null or data_block!=null">
+        		r.data_block=b.id and b.device_id=d.id and d.line_id=l.id
+        	</if>
         	<if test="factory != null and factory != ''">
-				and	s.factory_code = #{factory}
+				and	l.factory_id = #{factory}
 			</if>        	
-        	<if test="station != null and station != ''">
-				and	d.station_code = #{station}
+        	<if test="line != null and line != ''">
+				and	d.line_id = #{line}
 			</if>
         	<if test="device != null and device != ''">
-				and	b.device_code = #{device}
+				and	b.device_id = #{device}
 			</if>
-        	<if test="datablock != null and datablock !='' ">
-				and	r.data_block = #{datablock}
+        	<if test="data_block != null and data_block !='' ">
+				and	r.data_block = #{data_block}
 			</if>												
         </where>   
     </select>

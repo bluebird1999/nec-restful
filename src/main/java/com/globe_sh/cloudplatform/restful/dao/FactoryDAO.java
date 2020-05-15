@@ -16,19 +16,19 @@ public interface FactoryDAO {
     @Select("select * from c_factory")
     public List < FactoryEntity > getFactoryAll();
 
-    @Select("SELECT * FROM c_factory WHERE factory_code = #{code}")
-    public FactoryEntity getFactoryByCode(@Param("code") String code);
+    @Select("SELECT * FROM c_factory WHERE id = #{id}")
+    public FactoryEntity getFactory(@Param("id") int id);
     
     @Insert("INSERT INTO c_factory (factory_code, create_time, factory_name, factory_description) " +
             " VALUES (#{factory_code}, #{create_time}, #{factory_name}, #{factory_description})")
     @SelectKey(statement="select LAST_INSERT_ID()", keyProperty="id", keyColumn="id", before=false, resultType=int.class)
     public int insertFactory(FactoryEntity se);  
     
-    @Delete("DELETE FROM c_factory WHERE factory_code = #{code}")
-    public int deleteFactory(@Param("code") String code); 
+    @Delete("DELETE FROM c_factory WHERE id = #{id}")
+    public int deleteFactory(@Param("id") int id); 
     
     @Update("UPDATE c_factory SET factory_code=#{st.factory_code}, " +
     		"factory_name=#{st.factory_name}, factory_description=#{st.factory_description} " +
-    		"WHERE factory_code = #{code}")
-    public int updateFactory(@Param("code") String code, @Param("st") FactoryEntity st);   
+    		"WHERE id = #{id}")
+    public int updateFactory(@Param("id") int id, @Param("st") FactoryEntity st);   
 }

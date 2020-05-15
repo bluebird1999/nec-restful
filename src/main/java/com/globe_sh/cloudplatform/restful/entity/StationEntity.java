@@ -13,7 +13,10 @@ public class StationEntity implements Serializable {
 	private int id;
 	private String station_code;
 	private String create_time;
-	private String factory_code;
+	private int factory_id;
+	private int line_id;
+	private int device_id;
+	private int device_number;
 	private String station_name;
 	private String station_description;
 	private int station_status;
@@ -21,12 +24,16 @@ public class StationEntity implements Serializable {
 	public StationEntity() {
 	}
 	
-	public StationEntity(int id, String stationCode, String createTime, String factoryCode,
+	public StationEntity(int id, String stationCode, String createTime, int factoryId,
+			int lineId, int deviceId, int deviceNumber,
 			String stationName, String stationDescription, int stationStatus) {
 		this.id = id;
 		this.station_code = stationCode;
 		this.create_time = createTime;
-		this.factory_code = factoryCode;
+		this.factory_id = factoryId;
+		this.line_id = lineId;
+		this.device_id = deviceId;
+		this.device_number = deviceNumber;
 		this.station_name = stationName;
 		this.station_description = stationDescription;
 		this.station_status = stationStatus;
@@ -50,11 +57,29 @@ public class StationEntity implements Serializable {
 	public void setCreateTime(String createTime) {
 		this.create_time = createTime;
 	}
-	public String getFactoryCode() {
-		return factory_code;
+	public int getFactoryId() {
+		return factory_id;
 	}
-	public void setFactoryCode(String factoryCode) {
-		this.factory_code = factoryCode;
+	public void setFactoryId(int factoryId) {
+		this.factory_id = factoryId;
+	}	
+	public int getLineId() {
+		return line_id;
+	}
+	public void setLineId(int lineId) {
+		this.line_id = lineId;
+	}
+	public int getDeviceId() {
+		return device_id;
+	}
+	public void setDeviceId(int deviceId) {
+		this.device_id = deviceId;
+	}
+	public int getDeviceNumber() {
+		return device_number;
+	}
+	public void setDeviceNumber(int deviceNumber) {
+		this.device_number = deviceNumber;
 	}	
 	public String getStationName() {
 		return station_name;
@@ -79,7 +104,10 @@ public class StationEntity implements Serializable {
 		json.put("id", this.id);
 		json.put("station_code", this.station_code);
 		json.put("create_time", this.create_time);
-		json.put("factory_code", this.factory_code);
+		json.put("factory_id", this.factory_id);
+		json.put("line_id", this.line_id);
+		json.put("device_id", this.device_id);
+		json.put("device_number", this.device_number);
 		json.put("station_name", this.station_name);
 		json.put("station_description", this.station_description);
 		json.put("station_status", this.station_status);

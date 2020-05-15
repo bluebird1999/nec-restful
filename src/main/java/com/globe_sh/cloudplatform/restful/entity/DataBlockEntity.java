@@ -11,21 +11,23 @@ public class DataBlockEntity implements Serializable {
 	private int id;
 	private String data_block_code;
 	private String create_time;
-	private String device_code;
+	private int device_id;
 	private String data_block_name;
 	private String data_block_description;
+	private int	data_block_length;
 
 	public DataBlockEntity() {
 	}
 	
-	public DataBlockEntity(int id, String dataBlockCode, String createTime, String deviceCode, 
-			String dataBlockName, String dataBlockDescription) {
+	public DataBlockEntity(int id, String dataBlockCode, String createTime, int deviceId, 
+			String dataBlockName, String dataBlockDescription,int dataBlockLength) {
 		this.id = id;
 		this.data_block_code = dataBlockCode;
 		this.create_time = createTime;
-		this.device_code = deviceCode;
+		this.device_id = deviceId;
 		this.data_block_name = dataBlockName;
 		this.data_block_description = dataBlockDescription;
+		this.data_block_length = dataBlockLength;
 	}
 	
 	public int getId() {
@@ -46,11 +48,11 @@ public class DataBlockEntity implements Serializable {
 	public void setCreateTime(String createTime) {
 		this.create_time = createTime;
 	}
-	public String getDeviceCode() {
-		return device_code;
+	public int getDeviceId() {
+		return device_id;
 	}
-	public void setDeviceCode(String deviceCode) {
-		this.device_code = deviceCode;
+	public void setDeviceId(int deviceId) {
+		this.device_id = deviceId;
 	}	
 	public String getDataBlockName() {
 		return data_block_name;
@@ -64,14 +66,21 @@ public class DataBlockEntity implements Serializable {
 	public void setDataBlockDescription(String dataBlockDescription) {
 		this.data_block_description = dataBlockDescription;
 	}
+	public int getDataBlockLength() {
+		return data_block_length;
+	}
+	public void setDataBlockLength(int dataBlockLength) {
+		this.data_block_length = dataBlockLength;
+	}	
 	public String getJsonString() {
 		JSONObject json = new JSONObject();
 		json.put("id", this.id);
 		json.put("data_block_code", this.data_block_code);
 		json.put("create_time", this.create_time);
-		json.put("device_code", this.device_code);
+		json.put("device_id", this.device_id);
 		json.put("data_block_name", this.data_block_name);
 		json.put("data_block_description", this.data_block_description);
+		json.put("data_block_length", this.data_block_length);
 		return json.toJSONString();
 	}		
 }

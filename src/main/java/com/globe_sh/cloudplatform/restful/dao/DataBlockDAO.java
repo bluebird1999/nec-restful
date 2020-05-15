@@ -17,18 +17,19 @@ public interface DataBlockDAO {
     public List < DataBlockEntity > getDataBlockAll();
 
     @Select("SELECT * FROM c_data_block WHERE id = #{id}")
-    public DataBlockEntity getDataBlockById(@Param("id") int id);
+    public DataBlockEntity getDataBlock(@Param("id") int id);
 
-    @Insert("INSERT INTO c_data_block (data_block_code, create_time, device_code, data_block_name, data_block_description) " +
-            " VALUES (#{data_block_code}, #{create_time}, #{device_code}, #{data_block_name}, #{data_block_description})")
+    @Insert("INSERT INTO c_data_block (data_block_code, create_time, device_id, data_block_name, data_block_description, data_block_length) " +
+            " VALUES (#{data_block_code}, #{create_time}, #{device_id}, #{data_block_name}, #{data_block_description}, #{data_block_length})")
     @SelectKey(statement="select LAST_INSERT_ID()", keyProperty="id", keyColumn="id", before=false, resultType=int.class)
     public int insertDataBlock(DataBlockEntity se);  
     
     @Delete("DELETE FROM c_data_block WHERE id = #{id}")
-    public int deleteDataBlock(@Param("id") int code); 
+    public int deleteDataBlock(@Param("id") int id); 
     
-    @Update("UPDATE c_data_block SET data_block_code=#{st.data_block_code}, device_code=#{st.device_code}, " +
-    		"data_block_name=#{st.data_block_name}, data_block_description=#{st.data_block_description} " +
+    @Update("UPDATE c_data_block SET data_block_code=#{st.data_block_code}, device_id=#{st.device_id}, " +
+    		"data_block_name=#{st.data_block_name}, data_block_description=#{st.data_block_description}, " +
+    		"data_block_length=#{st.data_block_length} " +
     		"WHERE id = #{id}")
     public int updateDataBlock(@Param("id") int id, @Param("st") DataBlockEntity st);          
 }
