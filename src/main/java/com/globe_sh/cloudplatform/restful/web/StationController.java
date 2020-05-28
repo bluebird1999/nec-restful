@@ -57,9 +57,9 @@ public class StationController {
 					jo.put("id",obj.getId());
 					jo.put("code",obj.getStationCode());
 					jo.put("create",obj.getCreateTime());
-					jo.put("factory",obj.getFactoryId());
-					jo.put("line",obj.getLineId());
-					jo.put("device",obj.getDeviceId());
+					jo.put("factory",obj.getFid());
+					jo.put("line",obj.getLid());
+					jo.put("device",obj.getDid());
 					jo.put("device_number",obj.getDeviceNumber());
 					jo.put("name",obj.getStationName());		
 					jo.put("description",obj.getStationDescription());
@@ -82,9 +82,9 @@ public class StationController {
 				res.put("id",rs.getId());
 				res.put("code",rs.getStationCode());
 				res.put("create",rs.getCreateTime());
-				res.put("factory",rs.getFactoryId());
-				res.put("line",rs.getLineId());
-				res.put("device",rs.getDeviceId());
+				res.put("factory",rs.getFid());
+				res.put("line",rs.getLid());
+				res.put("device",rs.getDid());
 				res.put("device_number",rs.getDeviceNumber());				
 				res.put("name",rs.getStationName());		
 				res.put("description",rs.getStationDescription());
@@ -111,21 +111,24 @@ public class StationController {
 						//required parameters
 						st.setCreateTime(dt);
 						st.setStationStatus(2);
-						if(station.containsKey("factory"))
+/*						if(station.containsKey("factory"))
 							if( station.getString("factory").length()>0)
 								st.setFactoryId(station.getIntValue("factory"));
 							else
 								continue;
 						else
 							continue;
+*/							
 						
 						//other fileds
 						if(station.containsKey("code"))
-							st.setStationCode(station.getString("code"));						
+							st.setStationCode(station.getString("code"));	
+						if(station.containsKey("factory"))
+							st.setFid(station.getString("factory"));						
 						if(station.containsKey("line"))
-							st.setLineId(station.getIntValue("line"));
+							st.setLid(station.getString("line"));
 						if(station.containsKey("device"))
-							st.setDeviceId(station.getIntValue("device"));
+							st.setDid(station.getString("device"));
 						if(station.containsKey("device_number"))
 							st.setDeviceNumber(station.getIntValue("device_number"));						
 						if(station.containsKey("name"))
@@ -177,11 +180,11 @@ public class StationController {
 				if(jsonParam.containsKey("code"))
 					st.setStationCode(jsonParam.getString("code"));				
 				if(jsonParam.containsKey("factory"))
-					st.setFactoryId(jsonParam.getIntValue("factory"));
+					st.setFid(jsonParam.getString("factory"));
 				if(jsonParam.containsKey("line"))
-					st.setLineId(jsonParam.getIntValue("line"));
+					st.setLid(jsonParam.getString("line"));
 				if(jsonParam.containsKey("device"))
-					st.setDeviceId(jsonParam.getIntValue("device"));
+					st.setDid(jsonParam.getString("device"));
 				if(jsonParam.containsKey("device_number"))
 					st.setDeviceNumber(jsonParam.getIntValue("device_number"));						
 				if(jsonParam.containsKey("name"))

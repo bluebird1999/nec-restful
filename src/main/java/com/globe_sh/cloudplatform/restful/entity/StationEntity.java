@@ -16,6 +16,9 @@ public class StationEntity implements Serializable {
 	private int factory_id;
 	private int line_id;
 	private int device_id;
+	private String fid;
+	private String lid;
+	private String did;
 	private int device_number;
 	private String station_name;
 	private String station_description;
@@ -25,7 +28,8 @@ public class StationEntity implements Serializable {
 	}
 	
 	public StationEntity(int id, String stationCode, String createTime, int factoryId,
-			int lineId, int deviceId, int deviceNumber,
+			int lineId, int deviceId, String fid, String lid, String did,
+			int deviceNumber,
 			String stationName, String stationDescription, int stationStatus) {
 		this.id = id;
 		this.station_code = stationCode;
@@ -33,6 +37,9 @@ public class StationEntity implements Serializable {
 		this.factory_id = factoryId;
 		this.line_id = lineId;
 		this.device_id = deviceId;
+		this.fid = fid;
+		this.lid = lid;
+		this.did = did;
 		this.device_number = deviceNumber;
 		this.station_name = stationName;
 		this.station_description = stationDescription;
@@ -75,6 +82,24 @@ public class StationEntity implements Serializable {
 	public void setDeviceId(int deviceId) {
 		this.device_id = deviceId;
 	}
+	public String getFid() {
+		return fid;
+	}
+	public void setFid(String fid) {
+		this.fid = fid;
+	}	
+	public String getLid() {
+		return lid;
+	}
+	public void setLid(String lid) {
+		this.lid = lid;
+	}	
+	public String getDid() {
+		return did;
+	}
+	public void setDid(String did) {
+		this.did = did;
+	}		
 	public int getDeviceNumber() {
 		return device_number;
 	}
@@ -107,6 +132,9 @@ public class StationEntity implements Serializable {
 		json.put("factory_id", this.factory_id);
 		json.put("line_id", this.line_id);
 		json.put("device_id", this.device_id);
+		json.put("fid", this.fid);
+		json.put("lid", this.lid);
+		json.put("did", this.did);		
 		json.put("device_number", this.device_number);
 		json.put("station_name", this.station_name);
 		json.put("station_description", this.station_description);
