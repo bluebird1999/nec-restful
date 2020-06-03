@@ -30,6 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.globe_sh.cloudplatform.common.cache.JedisOperater;
 import com.globe_sh.cloudplatform.common.util.StaticMethod;
 import com.globe_sh.cloudplatform.common.util.StaticOperater;
@@ -52,10 +54,17 @@ public class LineController {
 	  
 //************************Line************************	
 		@RequestMapping(value = "/lines", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	    public JSONObject getLineAll() {
+	    public JSONObject getLineAll(
+	    		@RequestParam(value="factory",required=false) String factory,
+	    		@RequestParam(value="page_start",required=false,defaultValue="1") String page_start,
+	    		@RequestParam(value="page_size",required=false,defaultValue="10") String page_size,
+	    		@RequestParam(value="order_field",required=false,defaultValue="id") String order_field,
+	    		@RequestParam(value="order_type",required=false,defaultValue="asc") String order_type	    		
+	    		) {
 			try {
 				JSONArray res = new JSONArray();
-				List<LineEntity> rs = lineDao.getLineAll();
+				PageHelper.startPage(Integer.valueOf(page_start), Integer.valueOf(page_size), order_field + " " + order_type);
+				Page<LineEntity> rs = lineDao.getLineAllParam(factory);
 				
 				for( LineEntity obj: rs)
 				{
@@ -137,10 +146,31 @@ public class LineController {
 			}
 	    }
 		@RequestMapping(value = "/lines/{id}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
-	    public JSONObject createLine(@PathVariable("id") int id ) {
+	    public JSONObject deleteLine(
+	    		@PathVariable("id") int id,
+	    		@RequestParam(value="ids",required=false) String ids
+	    		) {
 			try {
+				List<String> idList = new ArrayList<String>();
+				int rs;
+				if( ids!=null && ids.length()>0 ) {
+					String input[] = ids.split(",");
+					if( input.length>0 ) {
+						for(int i = 0; i < input.length; i++) {
+							idList.add(input[i]);
+						}				
+					}	
+					if( idList.size() == 0) {
+						idList.add( String.valueOf(id) );
+					}
+					rs = deleteLineSingle(idList);					
+				}
+				else {
+					idList.add( String.valueOf(id) );
+					rs = deleteLineSingle(idList);					
+				}				
+				
 				JSONObject res = new JSONObject();
-				int rs = lineDao.deleteLine(id);
 				res.put("result",rs);	
 		        return ResponseUtil.success(res);			
 			} catch (Exception e) {
@@ -149,6 +179,15 @@ public class LineController {
 				return ResponseUtil.failureMore(502,e.getMessage(),res);
 			}
 	    }
+		
+		public int deleteLineSingle(List<String> idList) {
+			int rs=0;
+			for(int i=0;i<idList.size();i++) {
+				rs = rs + lineDao.deleteLine( Integer.parseInt(idList.get(i)) );		
+			}
+			return rs;		
+		}
+		
 		@RequestMapping(value = "/lines/{id}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	    public JSONObject updateLine(
 	    		@PathVariable("id") int id,

@@ -9,6 +9,9 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.Param;
+
+import com.github.pagehelper.Page;
+import com.globe_sh.cloudplatform.restful.entity.DecoderEntity;
 import com.globe_sh.cloudplatform.restful.entity.DeviceEntity;
 
 @Mapper
@@ -16,6 +19,15 @@ public interface DeviceDAO {
     @Select("select * from c_device")
     public List < DeviceEntity > getDeviceAll();
 
+    public Page < DeviceEntity > getDeviceAllParam(
+    		/*
+    		@Param("factory") String factory,
+    		@Param("line") String line,
+    		@Param("device") String device,
+    		*/
+    		@Param("line") String line
+    		);
+    
     @Select("SELECT * FROM c_device WHERE id = #{id}")
     public DeviceEntity getDevice(@Param("id") int id);
 

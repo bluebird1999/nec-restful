@@ -6,6 +6,7 @@ public class DataEntity implements Serializable {
 
 	private static final long serialVersionUID = 3558195671797896609L;
 
+	private int id;
 	private String sample_time;
 	private int factory;
 	private int line;
@@ -18,8 +19,9 @@ public class DataEntity implements Serializable {
 	public DataEntity() {
 	}
 	
-	public DataEntity(String sampleTime, int factory, int line, int device, 
+	public DataEntity(int id, String sampleTime, int factory, int line, int device, 
 			int dataBlock, int station, int code, String value) {
+		this.id = id;
 		this.sample_time = sampleTime;
 		this.factory = factory;
 		this.line = line;
@@ -30,6 +32,12 @@ public class DataEntity implements Serializable {
 		this.value = value;
 	}
 	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public String getSampleTime() {
 		return sample_time;
 	}

@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.globe_sh.cloudplatform.common.cache.JedisOperater;
 import com.globe_sh.cloudplatform.common.util.StaticMethod;
 import com.globe_sh.cloudplatform.common.util.StaticOperater;
@@ -42,16 +44,23 @@ public class DecoderController {
 	  
 	@RequestMapping(value = "/decoders", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public JSONObject getDecoderAll(
+    		/*
     		@RequestParam(value="factory",required=false) String factory,
     		@RequestParam(value="line",required=false) String line,
 			@RequestParam(value="device",required=false) String device,
-			@RequestParam(value="data_block",required=false) String data_block  		
+			*/
+			@RequestParam(value="data_block",required=false) String data_block,
+    		@RequestParam(value="page_start",required=false,defaultValue="1") String page_start,
+    		@RequestParam(value="page_size",required=false,defaultValue="10") String page_size,
+    		@RequestParam(value="order_field",required=false,defaultValue="id") String order_field,
+    		@RequestParam(value="order_type",required=false,defaultValue="asc") String order_type			
     		) {
 		try {
 			JSONArray res = new JSONArray();
-			List<DecoderEntity> rs;
+			PageHelper.startPage(Integer.valueOf(page_start), Integer.valueOf(page_size), order_field + " " + order_type);
+			Page<DecoderEntity> rs;
 			
-			rs = decoderDao.getDecoderAllParam(factory,line,device,data_block);
+			rs = decoderDao.getDecoderAllParam(data_block);
 			
 			for( DecoderEntity obj: rs)
 			{
@@ -182,7 +191,8 @@ public class DecoderController {
 	@RequestMapping(value = "/decoders/{id}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
     public JSONObject deleteDecoder(
     		@PathVariable("id") int id, 
-    		@RequestParam(value="ids",required=false) String ids) {
+    		@RequestParam(value="ids",required=false) String ids
+    		) {
 		try {
 			List<String> idList = new ArrayList<String>();
 			int rs;

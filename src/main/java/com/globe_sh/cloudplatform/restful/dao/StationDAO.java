@@ -9,12 +9,14 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.Param;
+
+import com.github.pagehelper.Page;
 import com.globe_sh.cloudplatform.restful.entity.StationEntity;
 
 @Mapper
 public interface StationDAO {
     @Select("select * from c_station")
-    public List < StationEntity > getStationAll();
+    public Page < StationEntity > getStationAll();
 
     @Select("SELECT * FROM c_station WHERE id = #{id}")
     public StationEntity getStation(@Param("id") int id);

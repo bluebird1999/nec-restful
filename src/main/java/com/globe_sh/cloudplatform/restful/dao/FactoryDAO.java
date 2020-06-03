@@ -9,12 +9,14 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.Param;
+
+import com.github.pagehelper.Page;
 import com.globe_sh.cloudplatform.restful.entity.FactoryEntity;
 
 @Mapper
 public interface FactoryDAO {
     @Select("select * from c_factory")
-    public List < FactoryEntity > getFactoryAll();
+    public Page < FactoryEntity > getFactoryAll();
 
     @Select("SELECT * FROM c_factory WHERE id = #{id}")
     public FactoryEntity getFactory(@Param("id") int id);

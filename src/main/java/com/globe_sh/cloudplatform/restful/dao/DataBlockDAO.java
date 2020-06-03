@@ -9,13 +9,25 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.Param;
+
+import com.github.pagehelper.Page;
 import com.globe_sh.cloudplatform.restful.entity.DataBlockEntity;
+import com.globe_sh.cloudplatform.restful.entity.DecoderEntity;
 
 @Mapper
 public interface DataBlockDAO {
     @Select("select * from c_data_block")
     public List < DataBlockEntity > getDataBlockAll();
 
+    public Page < DataBlockEntity > getDataBlockAllParam(
+    		/*
+    		@Param("factory") String factory,
+    		@Param("line") String line,
+    		@Param("device") String device,
+    		*/
+    		@Param("device") String device
+    		);
+    
     @Select("SELECT * FROM c_data_block WHERE id = #{id}")
     public DataBlockEntity getDataBlock(@Param("id") int id);
 

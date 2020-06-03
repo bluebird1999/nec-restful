@@ -32,6 +32,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.globe_sh.cloudplatform.common.cache.JedisOperater;
 import com.globe_sh.cloudplatform.common.util.StaticMethod;
 import com.globe_sh.cloudplatform.common.util.StaticOperater;
@@ -53,10 +55,17 @@ public class DataBlockController {
 	  
 //************************DataBlock************************	
 		@RequestMapping(value = "/datablocks", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	    public JSONObject getDataBlockAll() {
+	    public JSONObject getDataBlockAll(
+	    		@RequestParam(value="device",required=false) String device,
+	    		@RequestParam(value="page_start",required=false,defaultValue="1") String page_start,
+	    		@RequestParam(value="page_size",required=false,defaultValue="10") String page_size,
+	    		@RequestParam(value="order_field",required=false,defaultValue="id") String order_field,
+	    		@RequestParam(value="order_type",required=false,defaultValue="asc") String order_type	    		
+	    		) {
 			try {
 				JSONArray res = new JSONArray();
-				List<DataBlockEntity> rs = dataBlockDao.getDataBlockAll();
+				PageHelper.startPage(Integer.valueOf(page_start), Integer.valueOf(page_size), order_field + " " + order_type);
+				Page<DataBlockEntity> rs = dataBlockDao.getDataBlockAllParam(device);
 				
 				for( DataBlockEntity obj: rs)
 				{
@@ -146,7 +155,8 @@ public class DataBlockController {
 		@RequestMapping(value = "/datablocks/{id}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
 	    public JSONObject deleteDataBlock(
 	    		@PathVariable("id") int id,
-	    		@RequestParam(value="ids",required=false) String ids ) {
+	    		@RequestParam(value="ids",required=false) String ids 
+	    		) {
 			try {
 				List<String> idList = new ArrayList<String>();
 				int rs;

@@ -2,6 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.globe_sh.cloudplatform.restful.dao.DecoderDAO">        
     <select id="getDecoderAllParam" parameterType="String" resultType="com.globe_sh.cloudplatform.restful.entity.DecoderEntity">
+        select r.* from c_data_decoder r
+        <where>
+        	<if test="data_block != null and data_block !='' ">
+				and	r.data_block = #{data_block}
+			</if>												
+        </where>   
+    </select>
+</mapper>
+
+<!-- 
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globe_sh.cloudplatform.restful.dao.DecoderDAO">        
+    <select id="getDecoderAllParam" parameterType="String" resultType="com.globe_sh.cloudplatform.restful.entity.DecoderEntity">
         select r.*  
         from c_line l, c_device d, c_data_block b, c_data_decoder r
         <where>
@@ -23,3 +37,5 @@
         </where>   
     </select>
 </mapper>
+
+ -->

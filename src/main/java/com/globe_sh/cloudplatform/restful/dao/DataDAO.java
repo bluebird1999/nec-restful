@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.github.pagehelper.Page;
 import com.globe_sh.cloudplatform.restful.entity.DataEntity;;
 
 @Mapper
@@ -34,7 +35,7 @@ public interface DataDAO {
     		"i_decoded_data.data_batch_id = i_decoded_data_batch.data_batch_id) as abc where #{sql}")
 */    		
 //    public List <DataEntity> getData(@Param("st") String st);
-    public List < DataEntity > getData(
+    public Page < DataEntity > getData(
     		@Param("factory") String factory,
     		@Param("line") String line,
     		@Param("device") String device,

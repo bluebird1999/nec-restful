@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.globe_sh.cloudplatform.restful.dao.DataDAO">        
     <select id="getData" parameterType="String" resultType="com.globe_sh.cloudplatform.restful.entity.DataEntity">
-        select b.sample_time,b.factory,b.line,b.device,b.data_block,d.code,d.value 
+        select d.id,b.sample_time,b.factory,b.line,b.device,b.data_block,d.code,d.value 
         from i_decoded_data_batch b, i_decoded_data d
         <where>
         	d.batch=b.batch

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globe_sh.cloudplatform.restful.dao.DataBlockDAO">        
+    <select id="getDataBlockAllParam" parameterType="String" resultType="com.globe_sh.cloudplatform.restful.entity.DataBlockEntity">
+        select d.* from c_data_block d
+        <where>
+        	<if test="device != null and device !='' ">
+				and	d.device_id = #{device}
+			</if>												
+        </where>   
+    </select>
+</mapper>

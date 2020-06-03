@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.globe_sh.cloudplatform.restful.dao.LineDAO">        
+    <select id="getLineAllParam" parameterType="String" resultType="com.globe_sh.cloudplatform.restful.entity.LineEntity">
+        select l.* from c_line l
+        <where>
+        	<if test="factory != null and factory !='' ">
+				and	l.factory_id = #{factory}
+			</if>												
+        </where>   
+    </select>
+</mapper>

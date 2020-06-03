@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.Param;
 
+import com.github.pagehelper.Page;
 import com.globe_sh.cloudplatform.restful.entity.DataEntity;
 import com.globe_sh.cloudplatform.restful.entity.DecoderEntity;
 
@@ -18,10 +19,12 @@ public interface DecoderDAO {
 	@Select("select * from c_data_decoder")
    	public List < DecoderEntity > getDecoderAll();
 
-    public List < DecoderEntity > getDecoderAllParam(
+    public Page < DecoderEntity > getDecoderAllParam(
+    		/*
     		@Param("factory") String factory,
     		@Param("line") String line,
     		@Param("device") String device,
+    		*/
     		@Param("data_block") String data_block
     		);
     

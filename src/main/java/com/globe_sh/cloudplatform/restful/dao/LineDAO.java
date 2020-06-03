@@ -9,6 +9,9 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.Param;
+
+import com.github.pagehelper.Page;
+import com.globe_sh.cloudplatform.restful.entity.DeviceEntity;
 import com.globe_sh.cloudplatform.restful.entity.LineEntity;
 
 @Mapper
@@ -16,6 +19,15 @@ public interface LineDAO {
     @Select("select * from c_line")
     public List < LineEntity > getLineAll();
 
+    public Page < LineEntity > getLineAllParam(
+    		/*
+    		@Param("factory") String factory,
+    		@Param("line") String line,
+    		@Param("device") String device,
+    		*/
+    		@Param("factory") String factory
+    		);
+    
     @Select("SELECT * FROM c_line WHERE id = #{id}")
     public LineEntity getLine(@Param("id") int id);
 
