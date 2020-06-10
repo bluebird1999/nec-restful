@@ -1,7 +1,5 @@
 package com.globe_sh.cloudplatform.restful.dao;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,8 +13,10 @@ import com.globe_sh.cloudplatform.restful.entity.StationEntity;
 
 @Mapper
 public interface StationDAO {
-    @Select("select * from c_station")
-    public Page < StationEntity > getStationAll();
+//    @Select("select * from c_station")
+    public Page < StationEntity > getStationAll(
+    		@Param("code") String code
+    		);
 
     @Select("SELECT * FROM c_station WHERE id = #{id}")
     public StationEntity getStation(@Param("id") int id);

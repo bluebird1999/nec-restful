@@ -50,6 +50,7 @@ public class StationController {
 //************************Station************************	
 		@RequestMapping(value = "/stations", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	    public JSONObject getStationAll(
+	    		@RequestParam(value="code",required=false,defaultValue="") String code,
 	    		@RequestParam(value="page_start",required=false,defaultValue="1") String page_start,
 	    		@RequestParam(value="page_size",required=false,defaultValue="10") String page_size,
 	    		@RequestParam(value="order_field",required=false,defaultValue="id") String order_field,
@@ -57,7 +58,7 @@ public class StationController {
 			try {
 				JSONArray res = new JSONArray();
 				PageHelper.startPage(Integer.valueOf(page_start), Integer.valueOf(page_size), order_field + " " + order_type);
-				Page<StationEntity> rs = stationDao.getStationAll();
+				Page<StationEntity> rs = stationDao.getStationAll(code);
 				
 				for( StationEntity obj: rs)
 				{
