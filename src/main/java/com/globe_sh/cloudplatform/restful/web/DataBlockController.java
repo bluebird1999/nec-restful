@@ -10,6 +10,7 @@ import com.globe_sh.cloudplatform.restful.dao.StationDAO;
 import com.globe_sh.cloudplatform.restful.entity.DeviceEntity;
 import com.globe_sh.cloudplatform.restful.dao.DeviceDAO;
 import com.globe_sh.cloudplatform.restful.entity.DataBlockEntity;
+import com.globe_sh.cloudplatform.restful.entity.DataEntity;
 import com.globe_sh.cloudplatform.restful.dao.DataBlockDAO;
 
 import com.globe_sh.cloudplatform.common.cache.JedisOperater;
@@ -34,6 +35,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.globe_sh.cloudplatform.common.cache.JedisOperater;
 import com.globe_sh.cloudplatform.common.util.StaticMethod;
 import com.globe_sh.cloudplatform.common.util.StaticOperater;
@@ -58,11 +60,12 @@ public class DataBlockController {
 	    public JSONObject getDataBlockAll(
 	    		@RequestParam(value="device",required=false) String device,
 	    		@RequestParam(value="page_start",required=false,defaultValue="1") String page_start,
-	    		@RequestParam(value="page_size",required=false,defaultValue="10") String page_size,
+	    		@RequestParam(value="page_size",required=false,defaultValue="99999999") String page_size,
 	    		@RequestParam(value="order_field",required=false,defaultValue="id") String order_field,
 	    		@RequestParam(value="order_type",required=false,defaultValue="asc") String order_type	    		
 	    		) {
 			try {
+				JSONObject jb = new JSONObject();
 				JSONArray res = new JSONArray();
 				PageHelper.startPage(Integer.valueOf(page_start), Integer.valueOf(page_size), order_field + " " + order_type);
 				Page<DataBlockEntity> rs = dataBlockDao.getDataBlockAllParam(device);
@@ -79,7 +82,17 @@ public class DataBlockController {
 					jo.put("length",obj.getDataBlockLength());
 					res.add(jo);
 				}
-		        return ResponseUtil.success(res);			
+				PageInfo<DataBlockEntity> info = new PageInfo<>(rs);
+				
+				int page_num = ((int)info.getTotal() - 1) / Integer.valueOf(page_size) + 1;
+				jb.put("data", res);
+				jb.put("page_number", page_num);
+				jb.put("page_id", page_start);
+				if( Integer.valueOf(page_size) == 99999999)
+					jb.put("page_size", (int)info.getTotal());
+				else
+					jb.put("page_size", page_size);
+		        return ResponseUtil.success(jb);		
 			} catch (Exception e) {
 				JSONObject res = new JSONObject();
 				return ResponseUtil.failureMore(502,e.getMessage(),res);

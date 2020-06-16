@@ -2,6 +2,7 @@ package com.globe_sh.cloudplatform.restful.web;
 
 import com.globe_sh.cloudplatform.restful.RestfulMain;
 import com.globe_sh.cloudplatform.restful.dao.DecoderDAO;
+import com.globe_sh.cloudplatform.restful.entity.DataEntity;
 import com.globe_sh.cloudplatform.restful.entity.DecoderEntity;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.globe_sh.cloudplatform.common.cache.JedisOperater;
 import com.globe_sh.cloudplatform.common.util.StaticMethod;
 import com.globe_sh.cloudplatform.common.util.StaticOperater;
@@ -51,11 +53,12 @@ public class DecoderController {
 			*/
 			@RequestParam(value="data_block",required=false) String data_block,
     		@RequestParam(value="page_start",required=false,defaultValue="1") String page_start,
-    		@RequestParam(value="page_size",required=false,defaultValue="10") String page_size,
+    		@RequestParam(value="page_size",required=false,defaultValue="99999999") String page_size,
     		@RequestParam(value="order_field",required=false,defaultValue="id") String order_field,
     		@RequestParam(value="order_type",required=false,defaultValue="asc") String order_type			
     		) {
 		try {
+			JSONObject jb = new JSONObject();
 			JSONArray res = new JSONArray();
 			PageHelper.startPage(Integer.valueOf(page_start), Integer.valueOf(page_size), order_field + " " + order_type);
 			Page<DecoderEntity> rs;
@@ -83,7 +86,17 @@ public class DecoderController {
 				
 				res.add(jo);
 			}
-	        return ResponseUtil.success(res);			
+			PageInfo<DecoderEntity> info = new PageInfo<>(rs);
+			
+			int page_num = ((int)info.getTotal() - 1) / Integer.valueOf(page_size) + 1;
+			jb.put("data", res);
+			jb.put("page_number", page_num);
+			jb.put("page_id", page_start);
+			if( Integer.valueOf(page_size) == 99999999)
+				jb.put("page_size", (int)info.getTotal());
+			else
+				jb.put("page_size", page_size);
+	        return ResponseUtil.success(jb);			
 		} catch (Exception e) {
 			JSONObject res = new JSONObject();
 			return ResponseUtil.failureMore(502,e.getMessage(),res);
