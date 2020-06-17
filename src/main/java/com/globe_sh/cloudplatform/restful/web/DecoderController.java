@@ -82,7 +82,8 @@ public class DecoderController {
 				jo.put("precision",obj.getDataPrecision());
 				jo.put("deviation",obj.getDataDeviation());
 				jo.put("unit",obj.getDataUnit());
-				jo.put("dictionary",obj.getDataDictionary());	
+				jo.put("dictionary",obj.getDataDictionary());
+				jo.put("low_precede",obj.getLowPrecede());	
 				
 				res.add(jo);
 			}
@@ -123,7 +124,8 @@ public class DecoderController {
 			res.put("precision",rs.getDataPrecision());
 			res.put("deviation",rs.getDataDeviation());
 			res.put("unit",rs.getDataUnit());
-			res.put("dictionary",rs.getDataDictionary());			
+			res.put("dictionary",rs.getDataDictionary());
+			res.put("low_precede",rs.getLowPrecede());	
 	        return ResponseUtil.success(res);			
 		} catch (Exception e) {
 			JSONObject res = new JSONObject();
@@ -183,6 +185,10 @@ public class DecoderController {
 						st.setDataUnit(decoder.getIntValue("unit"));
 					if(decoder.containsKey("dictionary"))
 						st.setDataDictionary(decoder.getString("dictionary"));	
+					if(decoder.containsKey("low_precede"))
+						st.setLowPrecede(decoder.getIntValue("low_precede"));
+					else
+						st.setLowPrecede(0);
 					
 					int rs = decoderDao.insertDecoder(st);
 					res.put("result",rs);
@@ -282,6 +288,8 @@ public class DecoderController {
 				st.setDataUnit(jsonParam.getIntValue("unit"));
 			if(jsonParam.containsKey("dictionary"))
 				st.setDataDictionary(jsonParam.getString("dictionary"));	
+			if(jsonParam.containsKey("low_precede"))
+				st.setLowPrecede(jsonParam.getIntValue("low_precede"));			
 					
 			JSONObject res = new JSONObject();
 			int rs = decoderDao.updateDecoder(id,st);

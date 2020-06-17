@@ -23,14 +23,15 @@ public class DecoderEntity implements Serializable {
 	private int data_deviation;
 	private int data_unit;
 	private String data_dictionary;	
-
+	private int low_precede;
+	
 	public DecoderEntity() {
 	}
 	
 	public DecoderEntity(int id, String dataCode, String createTime, int dataBlock,
 			String dataName, String dataDescription, String dataType, String dataKind,
 			int startByte, int startBit, int dataLength, float dataPrecision, 
-			int dataDeviation, int dataUnit, String dataDictionary) {
+			int dataDeviation, int dataUnit, String dataDictionary, int low_precede) {
 		this.id = id;
 		this.data_code = dataCode;
 		this.create_time = createTime;
@@ -45,7 +46,8 @@ public class DecoderEntity implements Serializable {
 		this.data_precision = dataPrecision;
 		this.data_deviation = dataDeviation;
 		this.data_unit = dataUnit;
-		this.data_dictionary = dataDictionary;		
+		this.data_dictionary = dataDictionary;
+		this.low_precede = low_precede;	
 	}
 	
 	public int getId() {
@@ -138,6 +140,12 @@ public class DecoderEntity implements Serializable {
 	public void setDataDictionary(String dataDictionary) {
 		this.data_dictionary = dataDictionary;
 	}	
+	public void setLowPrecede(int low_precede) {
+		this.low_precede = low_precede;
+	}	
+	public int getLowPrecede() {
+		return low_precede;
+	}	
 	public String getJsonString() {
 		JSONObject json = new JSONObject();
 		json.put("id", this.id);
@@ -154,7 +162,8 @@ public class DecoderEntity implements Serializable {
 		json.put("data_precision", this.data_precision);
 		json.put("data_deviation", this.data_deviation);
 		json.put("data_unit", this.data_unit);
-		json.put("data_dictionary", this.data_dictionary);		
+		json.put("data_dictionary", this.data_dictionary);
+		json.put("low_precede", this.low_precede);	
 		return json.toJSONString();
 	}	
 }

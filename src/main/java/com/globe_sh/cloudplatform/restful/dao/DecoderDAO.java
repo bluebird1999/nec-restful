@@ -33,10 +33,10 @@ public interface DecoderDAO {
 
     @Insert("INSERT INTO c_data_decoder (data_code, create_time, data_block, data_name, data_description," +
     		" data_type, data_kind, start_byte, start_bit, data_length, data_precision, data_deviation, " +
-    		" data_unit, data_dictionary) " +
+    		" data_unit, data_dictionary, low_precede) " +
             " VALUES (#{data_code}, #{create_time}, #{data_block}, #{data_name}, #{data_description}, " + 
     		" #{data_type}, #{data_kind}, #{start_byte}, #{start_bit}, #{data_length}, #{data_precision}, " + 
-            " #{data_deviation}, #{data_unit}, #{data_dictionary})")
+            " #{data_deviation}, #{data_unit}, #{data_dictionary}, #{low_precede})")
     @SelectKey(statement="select LAST_INSERT_ID()", keyProperty="id", keyColumn="id", before=false, resultType=int.class)
     public int insertDecoder(DecoderEntity se);  
     
@@ -53,7 +53,8 @@ public interface DecoderDAO {
     		"data_precision=#{st.data_precision}, " +
     		"data_deviation=#{st.data_deviation}, " +
     		"data_unit=#{st.data_unit}, " +
-    		"data_dictionary=#{st.data_dictionary} " +
+    		"data_dictionary=#{st.data_dictionary}, " +
+    		"low_precede=#{st.low_precede} " +
     		"WHERE id = #{id}")
     public int updateDecoder(@Param("id") int id, @Param("st") DecoderEntity st);      
 }
