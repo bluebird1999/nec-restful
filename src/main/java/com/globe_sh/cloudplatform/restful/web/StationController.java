@@ -34,8 +34,6 @@ import com.globe_sh.cloudplatform.common.util.StaticMethod;
 import com.globe_sh.cloudplatform.common.util.StaticOperater;
 import com.globe_sh.cloudplatform.common.util.StaticVariable;
 
-import org.apache.logging.log4j.*;
-
 import com.globe_sh.cloudplatform.restful.utils.ResponseUtil;
 
 import com.alibaba.fastjson.JSON;
@@ -47,7 +45,7 @@ public class StationController {
 	@Autowired
 	private StationDAO stationDao;
 	
-	private static Logger logger = org.apache.logging.log4j.LogManager.getLogger(StationController.class);
+//	private static Logger logger = org.slf4j.LoggerFactory(StationController.class);
 	  
 //************************Station************************	
 		@RequestMapping(value = "/stations", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")

@@ -42,7 +42,7 @@ import com.globe_sh.cloudplatform.common.util.StaticMethod;
 import com.globe_sh.cloudplatform.common.util.StaticOperater;
 import com.globe_sh.cloudplatform.common.util.StaticVariable;
 
-import org.apache.logging.log4j.*;
+//import org.slf4j.Logger.*;
 
 import com.globe_sh.cloudplatform.restful.utils.ResponseUtil;
 
@@ -55,7 +55,7 @@ public class FactoryController {
 	@Autowired
 	private FactoryDAO factoryDao;
 	
-	private static Logger logger = org.apache.logging.log4j.LogManager.getLogger(FactoryController.class);
+//	private static Logger logger = org.slf4j.LoggerFactory(FactoryController.class);
 	  
 //************************Factory************************	
 	@RequestMapping(value = "/factories", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")

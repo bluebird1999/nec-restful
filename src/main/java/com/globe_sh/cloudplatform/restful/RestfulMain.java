@@ -1,13 +1,13 @@
 package com.globe_sh.cloudplatform.restful;
 
-import org.apache.logging.log4j.*;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class RestfulMain {
 
-	private static Logger logger = org.apache.logging.log4j.LogManager.getLogger(RestfulMain.class);
+	private static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(RestfulMain.class);
 	
 	public static void main(String args[]) {
 		SpringApplication.run(RestfulMain.class, args);

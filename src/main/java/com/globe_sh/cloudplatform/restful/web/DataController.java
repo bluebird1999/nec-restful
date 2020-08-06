@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSONArray;
@@ -27,8 +28,6 @@ import com.globe_sh.cloudplatform.common.util.StaticMethod;
 import com.globe_sh.cloudplatform.common.util.StaticOperater;
 import com.globe_sh.cloudplatform.common.util.StaticVariable;
 
-import org.apache.logging.log4j.*;
-
 import com.globe_sh.cloudplatform.restful.utils.ResponseUtil;
 
 @RestController
@@ -38,7 +37,7 @@ public class DataController {
 	@Autowired
 	private DataDAO dataDao;
 	
-	private static Logger logger = org.apache.logging.log4j.LogManager.getLogger(DataController.class);
+	private static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(RestfulMain.class);
 	  
 	@RequestMapping(value = "/data", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public JSONObject getData(   		
