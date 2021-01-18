@@ -102,6 +102,7 @@ public class DeviceController {
 				
 				int page_num = ((int)info.getTotal() - 1) / Integer.valueOf(page_size) + 1;
 				jb.put("data", res);
+				jb.put("size", info.getTotal());
 				jb.put("page_number", page_num);
 				jb.put("page_id", page_start);
 				if( Integer.valueOf(page_size) == 99999999)
